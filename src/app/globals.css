@@ -204,6 +204,30 @@ html {
   animation: typewriterCaretBlink 0.9s step-end infinite;
 }
 
+/* Mobile perf: heavy blur filters are the #1 cause of jank during scroll.
+   Smaller viewports: reduce blur radii and disable backdrop-filter where it's decorative.
+   This leaves the visual feel close but massively improves scroll FPS. */
+@media (max-width: 768px) {
+  .blur-3xl {
+    --tw-blur: blur(24px);
+    filter: var(--tw-blur);
+  }
+  .blur-2xl {
+    --tw-blur: blur(18px);
+    filter: var(--tw-blur);
+  }
+  .blur-xl {
+    --tw-blur: blur(12px);
+    filter: var(--tw-blur);
+  }
+
+  .backdrop-blur-2xl,
+  .backdrop-blur-xl {
+    backdrop-filter: saturate(140%) blur(8px);
+    -webkit-backdrop-filter: saturate(140%) blur(8px);
+  }
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   * {

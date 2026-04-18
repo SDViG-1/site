@@ -1,188 +1,344 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 const PHRASES = [
   "Список задач на день\u00a0вызывает панику?",
   "Инерция не даёт сделать\u00a0первый шаг?",
   "Вечером кажется, что день\u00a0прошёл впустую?",
 ];
+// Индексы шагов: 0..PHRASES.length-1 — фразы, PHRASES.length — closing
+const CLOSING_STEP = PHRASES.length;
+const TOTAL_STEPS = PHRASES.length + 1;
+
+// Минимальная пауза между шагами, мс
+const COOLDOWN_MS = 700;
+// Порог для свайпа и колёсика
+const TOUCH_THRESHOLD = 24;
+const WHEEL_THRESHOLD = 6;
+
+type Phase = "before" | "active" | "after";
 
 export function Empathy() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end end"],
-  });
+  const sectionRef = useRef<HTMLElement>(null);
+  const [step, setStep] = useState(0);
+  const [phase, setPhase] = useState<Phase>("before");
 
-  const bgProgress = useTransform(scrollYProgress, [0.08, 0.4], [0, 1]);
-  const bg = useTransform(
-    bgProgress,
-    [0, 1],
-    ["#ffffff", "#0a0a0c"]
+  // Рефы, чтобы обработчики событий видели актуальные значения без пересоздания.
+  const phaseRef = useRef<Phase>(phase);
+  const stepRef = useRef(step);
+  const cooldownUntilRef = useRef(0);
+
+  useLayoutEffect(() => {
+    phaseRef.current = phase;
+  }, [phase]);
+  useLayoutEffect(() => {
+    stepRef.current = step;
+  }, [step]);
+
+  const lockScroll = useCallback(() => {
+    const scrollBarComp = window.innerWidth - document.documentElement.clientWidth;
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+    document.body.style.touchAction = "none";
+    document.body.style.overscrollBehavior = "none";
+    if (scrollBarComp > 0) document.body.style.paddingRight = `${scrollBarComp}px`;
+  }, []);
+
+  const unlockScroll = useCallback(() => {
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
+    document.body.style.touchAction = "";
+    document.body.style.overscrollBehavior = "";
+    document.body.style.paddingRight = "";
+  }, []);
+
+  const engage = useCallback(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    // Снэп к началу секции, чтобы sticky-панель была ровно в viewport
+    window.scrollTo({ top: section.offsetTop, behavior: "auto" });
+    phaseRef.current = "active";
+    stepRef.current = 0;
+    setStep(0);
+    setPhase("active");
+    cooldownUntilRef.current = performance.now() + 250;
+    lockScroll();
+  }, [lockScroll]);
+
+  const exit = useCallback(
+    (direction: 1 | -1) => {
+      const section = sectionRef.current;
+      unlockScroll();
+      phaseRef.current = direction === 1 ? "after" : "before";
+      setPhase(direction === 1 ? "after" : "before");
+      if (!section) return;
+      const target =
+        direction === 1
+          ? section.offsetTop + section.offsetHeight
+          : Math.max(0, section.offsetTop - 2);
+      // Следующий кадр — чтобы overflow реально снялся
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: target, behavior: "auto" });
+      });
+    },
+    [unlockScroll]
   );
 
-  const starsOpacity = useTransform(
-    scrollYProgress,
-    [0.2, 0.45, 0.95, 1],
-    [0, 1, 1, 0]
+  const advance = useCallback(
+    (dir: 1 | -1) => {
+      if (phaseRef.current !== "active") return;
+      const now = performance.now();
+      if (now < cooldownUntilRef.current) return;
+      cooldownUntilRef.current = now + COOLDOWN_MS;
+
+      const next = stepRef.current + dir;
+      if (next > CLOSING_STEP) {
+        exit(1);
+        return;
+      }
+      if (next < 0) {
+        exit(-1);
+        return;
+      }
+      stepRef.current = next;
+      setStep(next);
+    },
+    [exit]
   );
+
+  // Следим за положением секции: когда верх блока доходит до верха viewport — активируемся.
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const check = () => {
+      if (phaseRef.current !== "before" && phaseRef.current !== "after") return;
+      const rect = section.getBoundingClientRect();
+      const vh = window.innerHeight;
+
+      if (phaseRef.current === "before") {
+        // Секция заняла весь viewport (или почти) и её верх пересёк верх экрана
+        if (rect.top <= 2 && rect.bottom > vh * 0.5) {
+          engage();
+        }
+      } else if (phaseRef.current === "after") {
+        // Если пользователь промотал назад и секция снова ниже экрана — сбрасываем к before.
+        if (rect.top > 4) {
+          phaseRef.current = "before";
+          setPhase("before");
+        }
+      }
+    };
+
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check);
+    check();
+
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
+  }, [engage]);
+
+  // Перехватываем ввод в активной фазе.
+  useEffect(() => {
+    if (phase !== "active") return;
+
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      if (Math.abs(e.deltaY) < WHEEL_THRESHOLD) return;
+      advance(e.deltaY > 0 ? 1 : -1);
+    };
+
+    let touchStartY: number | null = null;
+    let touchConsumed = false;
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0]?.clientY ?? null;
+      touchConsumed = false;
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      if (touchStartY === null) return;
+      e.preventDefault();
+      if (touchConsumed) return;
+      const currentY = e.touches[0]?.clientY ?? touchStartY;
+      const delta = touchStartY - currentY;
+      if (Math.abs(delta) > TOUCH_THRESHOLD) {
+        touchConsumed = true;
+        advance(delta > 0 ? 1 : -1);
+      }
+    };
+    const onTouchEnd = () => {
+      touchStartY = null;
+      touchConsumed = false;
+    };
+
+    const onKey = (e: KeyboardEvent) => {
+      if (
+        e.key === "ArrowDown" ||
+        e.key === "PageDown" ||
+        e.key === " " ||
+        e.key === "Spacebar"
+      ) {
+        e.preventDefault();
+        advance(1);
+      } else if (e.key === "ArrowUp" || e.key === "PageUp") {
+        e.preventDefault();
+        advance(-1);
+      }
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", onTouchEnd, { passive: true });
+    window.addEventListener("keydown", onKey);
+
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchEnd);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [phase, advance]);
+
+  // На всякий случай снимаем лок при размонтировании
+  useEffect(() => {
+    return () => {
+      unlockScroll();
+    };
+  }, [unlockScroll]);
+
+  const isDark = phase === "active" || phase === "after";
+  const showClosing =
+    (phase === "active" && step === CLOSING_STEP) || phase === "after";
+  const activePhrase =
+    phase === "active" && step < CLOSING_STEP ? PHRASES[step] : null;
 
   return (
     <section
       id="method"
-      ref={ref}
+      ref={sectionRef}
       className="relative"
-      style={{ height: "200vh" }}
+      style={{ height: "100vh" }}
     >
       <motion.div
-        style={{ background: bg }}
+        initial={false}
+        animate={{ backgroundColor: isDark ? "#0a0a0c" : "#ffffff" }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
         className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden"
+        style={phase === "active" ? { touchAction: "none" } : undefined}
       >
-        {/* Soft ambient glow — appears once we're in the dark */}
-        <motion.div
-          aria-hidden="true"
-          style={{ opacity: starsOpacity }}
-          className="pointer-events-none absolute inset-0"
-        >
-          <div
-            className="absolute left-1/2 top-1/2 h-[900px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
-            style={{
-              background:
-                "radial-gradient(closest-side, rgba(27,170,150,0.10), transparent 70%)",
-            }}
-          />
-          <Stars />
-        </motion.div>
+        {/* Мягкое свечение в темноте */}
+        <AnimatePresence>
+          {isDark && (
+            <motion.div
+              key="glow"
+              aria-hidden="true"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8 }}
+              className="pointer-events-none absolute inset-0"
+            >
+              <div
+                className="absolute left-1/2 top-1/2 h-[900px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+                style={{
+                  background:
+                    "radial-gradient(closest-side, rgba(27,170,150,0.10), transparent 70%)",
+                  filter: "blur(60px)",
+                }}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="relative mx-auto flex h-full w-full max-w-[1100px] flex-col items-center justify-center px-6 text-center">
-          {PHRASES.map((p, i) => {
-            const start = 0.52 + i * 0.16;
-            const mid = start + 0.06;
-            const out = start + 0.14;
-            return (
-              <Phrase
-                key={p}
-                text={p}
-                progress={scrollYProgress}
-                range={[start, mid, out, Math.min(out + 0.04, 1)]}
-                index={i}
-              />
-            );
-          })}
+          <div className="relative flex items-center justify-center">
+            <AnimatePresence mode="wait" initial={false}>
+              {activePhrase && (
+                <motion.h2
+                  key={step}
+                  initial={{ opacity: 0, y: 22, filter: "blur(8px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: -22, filter: "blur(8px)" }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  className="max-w-[22ch] text-[36px] font-semibold leading-[1.08] tracking-[-0.02em] text-white sm:text-[54px] lg:text-[72px]"
+                >
+                  {activePhrase}
+                </motion.h2>
+              )}
 
-          {/* Closing line */}
-          <Closing progress={scrollYProgress} />
+              {showClosing && (
+                <motion.div
+                  key="closing"
+                  initial={{ opacity: 0, y: 28, filter: "blur(6px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: -20, filter: "blur(6px)" }}
+                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex flex-col items-center gap-5"
+                >
+                  <span
+                    className="inline-block h-12 w-[1px]"
+                    style={{
+                      background:
+                        "linear-gradient(to bottom, transparent, rgba(255,255,255,0.55), transparent)",
+                    }}
+                  />
+                  <p
+                    className="text-balance px-6 text-[22px] font-medium leading-snug text-white/90 sm:text-[28px] lg:text-[32px]"
+                    style={{ fontFamily: "var(--font-display)" }}
+                  >
+                    SDViGApp — твой спокойный выход.
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
-        {/* Scroll hint */}
-        <ScrollHint progress={scrollYProgress} />
+        {/* Прогресс-точки */}
+        {phase === "active" && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute bottom-8 left-1/2 flex -translate-x-1/2 gap-2"
+          >
+            {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
+              <motion.span
+                key={i}
+                animate={{
+                  backgroundColor:
+                    i === step ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.28)",
+                  scale: i === step ? 1.25 : 1,
+                }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="block h-1.5 w-1.5 rounded-full"
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Подсказка «Скролл» — только на первом шаге */}
+        <AnimatePresence>
+          {phase === "active" && step === 0 && (
+            <motion.div
+              key="hint"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.55 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6 }}
+              aria-hidden="true"
+              className="pointer-events-none absolute bottom-20 left-1/2 -translate-x-1/2 text-[11px] font-medium uppercase tracking-[0.28em] text-white/60"
+            >
+              Скролл
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </section>
-  );
-}
-
-function Phrase({
-  text,
-  progress,
-  range,
-  index,
-}: {
-  text: string;
-  progress: MotionValue<number>;
-  range: [number, number, number, number];
-  index: number;
-}) {
-  const opacity = useTransform(progress, range, [0, 1, 1, 0]);
-  const y = useTransform(progress, range, [24, 0, 0, -24]);
-  const blur = useTransform(progress, range, [14, 0, 0, 14]);
-  const filter = useTransform(blur, (v) => `blur(${v}px)`);
-
-  return (
-    <motion.h2
-      aria-hidden={index === 0 ? undefined : true}
-      style={{ opacity, y, filter }}
-      className="absolute max-w-[22ch] text-[36px] font-semibold leading-[1.08] tracking-[-0.02em] text-white sm:text-[54px] lg:text-[72px]"
-    >
-      {text}
-    </motion.h2>
-  );
-}
-
-function Closing({ progress }: { progress: MotionValue<number> }) {
-  const opacity = useTransform(progress, [0.92, 0.96, 1], [0, 1, 1]);
-  const y = useTransform(progress, [0.92, 0.96], [20, 0]);
-
-  return (
-    <motion.div
-      style={{ opacity, y }}
-      className="absolute bottom-16 flex flex-col items-center gap-3"
-    >
-      <span
-        className="inline-block h-10 w-[1px]"
-        style={{
-          background:
-            "linear-gradient(to bottom, transparent, rgba(255,255,255,0.5), transparent)",
-        }}
-      />
-      <p
-        className="text-[16px] font-medium text-white/75 sm:text-[18px]"
-        style={{ fontFamily: "var(--font-display)" }}
-      >
-        SDViGApp — твой спокойный выход.
-      </p>
-    </motion.div>
-  );
-}
-
-function ScrollHint({ progress }: { progress: MotionValue<number> }) {
-  const opacity = useTransform(
-    progress,
-    [0.45, 0.52, 0.88, 1],
-    [0, 0.6, 0.15, 0]
-  );
-  return (
-    <motion.div
-      aria-hidden="true"
-      style={{ opacity }}
-      className="pointer-events-none absolute bottom-8 left-1/2 -translate-x-1/2 text-[11px] font-medium uppercase tracking-[0.28em] text-white/60"
-    >
-      Скролл
-    </motion.div>
-  );
-}
-
-function Stars() {
-  return (
-    <svg
-      aria-hidden="true"
-      className="absolute inset-0 h-full w-full"
-      preserveAspectRatio="xMidYMid slice"
-    >
-      <defs>
-        <radialGradient id="dust" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="rgba(255,255,255,0.05)" />
-          <stop offset="100%" stopColor="rgba(255,255,255,0)" />
-        </radialGradient>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#dust)" />
-      {Array.from({ length: 50 }).map((_, i) => {
-        const x = (i * 137) % 100;
-        const y = (i * 53.5) % 100;
-        const r = (i % 7) * 0.12 + 0.3;
-        const o = 0.1 + ((i * 31) % 40) / 100;
-        return (
-          <circle
-            key={i}
-            cx={`${x}%`}
-            cy={`${y}%`}
-            r={r}
-            fill="white"
-            opacity={o}
-          />
-        );
-      })}
-    </svg>
   );
 }

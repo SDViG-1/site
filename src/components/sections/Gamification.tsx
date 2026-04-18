@@ -361,7 +361,7 @@ function OrbitBadges({ inView }: { inView: boolean }) {
 
 function BackgroundHexagons() {
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div className="pointer-events-none absolute inset-0 hidden overflow-hidden sm:block">
       {/* Top-right large orbit */}
       <motion.div
         className="absolute -right-20 -top-10 opacity-25"
