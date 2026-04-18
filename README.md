@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shift — Landing Page
 
-## Getting Started
+A premium, production-ready landing page for a productivity product, built with
+Next.js 16 App Router, TypeScript, Tailwind CSS v4 and Framer Motion. The
+interaction language is Russian.
 
-First, run the development server:
+The page is composed of eight sections — every one crafted with custom motion
+design, no templates or stock imagery.
+
+## Sections
+
+1. **Floating capsule navigation** — frosted glass that deepens on scroll,
+   spring-animated teal underline, calm text link and solid teal CTA.
+2. **Hero** — large heading with a _breathing_ last-word morph («хаоса» →
+   «выгорания» → «прокрастинации»), hand-built floating phone mockup with its
+   own Day-tab UI, soft teal blurs behind.
+3. **Dark Room (empathy)** — page fades from white to graphite, scroll-driven
+   oversized phrases cross-fade in and out.
+4. **Ecosystem** — asymmetric Bento grid (Morning/Evening, Focus, Wellbeing,
+   Inbox/Finance). Every card has its own bespoke hover choreography (task
+   check-off, focus progress ring, wellbeing bars filling, money blur).
+5. **Dopamine engine** — matte gold Hex-S coin that assembles from construction
+   lines; translucent hexagons orbit behind; the «Мастер» ring ignites on
+   scroll.
+6. **Privacy safe** — monolithic lock whose shackle snaps closed when the block
+   enters the viewport, plus three small pillars.
+7. **Pricing** — Базовый (Спокойствие) and Премиум (Ритм) with gold trim,
+   «Выбор фаундера» ribbon, and a teal heartbeat-pulsing CTA.
+8. **Footer** — bank-quality minimal corporate layout with links, status chip,
+   and regulatory disclosure.
+
+## Tech stack
+
+- Next.js 16 (App Router, Turbopack)
+- React 19 + TypeScript
+- Tailwind CSS v4 (custom `@theme` tokens — teal / gold / graphite)
+- Framer Motion (all animations, scroll progress, layout-id underline, etc.)
+- `clsx` + `tailwind-merge` for class composition
+- `next/font/google` — Inter (Cyrillic) + Lora (Cyrillic italic display) +
+  JetBrains Mono
+
+## Scripts
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev       # http://localhost:3000
+npm run build     # Production build
+npm run start     # Production server
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+src/
+├── app/
+│   ├── globals.css       # Theme tokens, keyframes, utility classes
+│   ├── layout.tsx        # Fonts, metadata, root shell
+│   └── page.tsx          # Composition of sections
+├── components/
+│   ├── sections/
+│   │   ├── Navbar.tsx
+│   │   ├── Hero.tsx
+│   │   ├── Empathy.tsx
+│   │   ├── Ecosystem.tsx
+│   │   ├── Gamification.tsx
+│   │   ├── Privacy.tsx
+│   │   ├── Pricing.tsx
+│   │   └── Footer.tsx
+│   ├── ui/
+│   │   └── Logo.tsx
+│   └── visual/
+│       └── PhoneMockup.tsx
+└── lib/
+    └── utils.ts          # cn() helper
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Motion principles
 
-## Learn More
+- Easing is consistent: `[0.22, 1, 0.36, 1]` (out-quint) for entrances,
+  `[0.65, 0, 0.35, 1]` for snappier interactions (lock, buttons).
+- `prefers-reduced-motion` is respected globally (see `globals.css`).
+- No layout thrash: hover scales are tiny (≤ 1.5%), the morphing word reserves
+  space with an invisible placeholder of the longest word.
 
-To learn more about Next.js, take a look at the following resources:
+## Design tokens
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Defined via Tailwind v4 `@theme` in `globals.css`:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `--color-teal-*` (50 → 900) — calm turquoise accent.
+- `--color-gold-*` (50 → 900) — matte editorial gold (no cheap shine).
+- `--color-ink`, `--color-graphite`, `--color-cream`, `--color-paper`.
+- `--shadow-soft`, `--shadow-card`, `--shadow-glow-teal`, `--shadow-glow-gold`.
+- `--ease-out-quint`, `--ease-in-out-quart`.
 
-## Deploy on Vercel
+## Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- All copy is Russian (as specified); language is set in `<html lang="ru">`.
+- Every visual — phone UI, hex coin, lock, icons — is hand-drawn inline SVG;
+  no image assets required.
