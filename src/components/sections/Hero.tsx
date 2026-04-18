@@ -162,7 +162,6 @@ function MorphWordStatic({ words }: { words: readonly string[] }) {
         прокрастинации
       </span>
       <span
-        aria-live="polite"
         className="absolute inset-0 whitespace-nowrap italic"
         style={{
           fontFamily: "var(--font-display)",
@@ -219,7 +218,6 @@ function MorphWordTypewriter({ words }: { words: readonly string[] }) {
         прокрастинации
       </span>
       <span
-        aria-live="polite"
         className="absolute inset-0 whitespace-nowrap italic"
         style={{
           fontFamily: "var(--font-display)",
