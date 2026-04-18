@@ -33,11 +33,11 @@ export function ArticleRating() {
   return (
     <section
       aria-labelledby="rating-heading"
-      className="rounded-[24px] border border-black/[0.06] bg-white p-6 sm:p-8"
+      className="rounded-[24px] border border-white/[0.08] bg-[#0a0a0c] p-6 sm:p-8"
     >
       <h3
         id="rating-heading"
-        className="text-[20px] font-semibold tracking-[-0.01em] text-[var(--color-ink)] sm:text-[22px]"
+        className="text-[20px] font-semibold tracking-[-0.01em] text-white sm:text-[22px]"
       >
         Насколько полезен был этот материал?
       </h3>
@@ -72,7 +72,7 @@ export function ArticleRating() {
           );
         })}
 
-        <span className="ml-2 text-[12.5px] font-medium text-[var(--color-ink)]/45">
+        <span className="ml-2 text-[12.5px] font-medium text-white/50">
           {locked ? `${rating} из 5` : "оцените от 1 до 5"}
         </span>
       </div>
@@ -101,15 +101,14 @@ export function ArticleRating() {
                   rows={4}
                   maxLength={MAX_CHARS}
                   placeholder="Ваши заметки или пожелания..."
-                  className="block w-full resize-none rounded-[16px] bg-[#f4f4f3] px-4 py-3.5 pr-20 text-[14.5px] leading-relaxed text-[var(--color-ink)] placeholder:text-[var(--color-ink)]/40 focus:outline-none focus:ring-2 focus:ring-[var(--color-teal-400)]/70"
-                  style={{ border: "1px solid transparent" }}
+                  className="block w-full resize-none rounded-[16px] border border-white/[0.08] bg-white/[0.03] px-4 py-3.5 pr-20 text-[14.5px] leading-relaxed text-white placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-[var(--color-teal-400)]/70"
                 />
                 <span
                   aria-live="polite"
                   className={`pointer-events-none absolute bottom-3 right-4 text-[11.5px] font-medium tabular-nums transition-colors duration-300 ${
                     overLimit
-                      ? "text-red-500"
-                      : "text-[var(--color-ink)]/40"
+                      ? "text-red-400"
+                      : "text-white/40"
                   }`}
                 >
                   {chars} / {MAX_CHARS}
@@ -156,7 +155,7 @@ export function ArticleRating() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 flex items-center gap-3 rounded-[16px] bg-[var(--color-teal-50)] px-4 py-4"
+            className="mt-6 flex items-center gap-3 rounded-[16px] border border-[var(--color-teal-400)]/30 bg-[var(--color-teal-400)]/10 px-4 py-4"
           >
             <span
               className="grid h-8 w-8 flex-none place-items-center rounded-full text-white"
@@ -181,7 +180,7 @@ export function ArticleRating() {
                 />
               </motion.svg>
             </span>
-            <p className="text-[14.5px] font-semibold text-[var(--color-teal-800)]">
+            <p className="text-[14.5px] font-semibold text-[var(--color-teal-200)]">
               Спасибо за отзыв!
             </p>
           </motion.div>

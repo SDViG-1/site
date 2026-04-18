@@ -51,10 +51,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0c" },
-  ],
+  themeColor: "#030303",
   width: "device-width",
   initialScale: 1,
 };
@@ -69,7 +66,7 @@ export default function RootLayout({
       lang="ru"
       className={`${inter.variable} ${display.variable} ${mono.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-[var(--color-paper)] text-[var(--color-ink)] selection:bg-teal-200/40">
+      <body className="min-h-full bg-[var(--background)] text-[var(--text-primary)] selection:bg-teal-400/40">
         {children}
       </body>
     </html>

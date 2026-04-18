@@ -41,21 +41,21 @@ export function Pricing() {
   return (
     <section
       id="pricing"
-      className="relative bg-[var(--color-paper)] py-28 sm:py-36"
+      className="relative bg-[#030303] py-28 sm:py-36"
     >
       <div className="mx-auto w-full max-w-[1100px] px-6">
         <div className="flex flex-col items-start gap-5 sm:items-center sm:text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-black/[0.06] bg-white px-3 py-1 text-[12px] font-medium text-[var(--color-ink)]/70">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-[12px] font-medium text-white/70">
             <span
               className="h-1.5 w-1.5 rounded-full"
-              style={{ background: "var(--color-gold-500)" }}
+              style={{ background: "var(--color-gold-400)" }}
             />
             Инвестиция в фокус
           </span>
-          <h2 className="max-w-[20ch] text-[34px] font-semibold leading-[1.05] tracking-[-0.02em] text-[var(--color-ink)] sm:text-[46px] lg:text-[56px]">
+          <h2 className="max-w-[20ch] text-[34px] font-semibold leading-[1.05] tracking-[-0.02em] text-white sm:text-[46px] lg:text-[56px]">
             Два тарифа. Ноль давления.
           </h2>
-          <p className="max-w-[56ch] text-[16px] leading-relaxed text-[var(--color-ink)]/55 sm:text-[17px]">
+          <p className="max-w-[56ch] text-[16px] leading-relaxed text-white/55 sm:text-[17px]">
             Оба плана без бесплатных триалов-ловушек. Переходишь в «Ритм», только
             если действительно чувствуешь, что он тебе нужен.
           </p>
@@ -67,7 +67,7 @@ export function Pricing() {
         </div>
 
         <div className="mt-10 flex flex-col items-center gap-2 text-center">
-          <p className="text-[12.5px] text-[var(--color-ink)]/50">
+          <p className="text-[12.5px] text-white/45">
             Годовая подписка «Ритм» — 4 490 ₽ (–25%). Отмена в любой момент.
           </p>
         </div>
@@ -83,34 +83,34 @@ function BaseCard() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="relative flex h-full flex-col rounded-[28px] border border-black/[0.08] bg-white p-8 sm:p-10"
+      className="relative flex h-full flex-col rounded-[28px] border border-white/[0.08] bg-[#0a0a0c] p-8 sm:p-10"
     >
-      <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-ink)]/45">
-        <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-ink)]/30" />
+      <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50">
+        <span className="h-1.5 w-1.5 rounded-full bg-white/30" />
         Базовый
       </div>
-      <h3 className="mt-4 text-[28px] font-semibold tracking-tight text-[var(--color-ink)]">
+      <h3 className="mt-4 text-[28px] font-semibold tracking-tight text-white">
         {PLANS.base.name}
       </h3>
-      <p className="mt-2 text-[14.5px] text-[var(--color-ink)]/55">
+      <p className="mt-2 text-[14.5px] text-white/55">
         {PLANS.base.tagline}
       </p>
 
       <div className="mt-8 flex items-end gap-2">
-        <span className="text-[56px] font-semibold leading-none tracking-tight text-[var(--color-ink)]">
+        <span className="text-[56px] font-semibold leading-none tracking-tight text-white">
           {PLANS.base.price}
-          <span className="text-[26px] align-top text-[var(--color-ink)]/60">
+          <span className="text-[26px] align-top text-white/55">
             ₽
           </span>
         </span>
-        <span className="mb-2 text-[13.5px] text-[var(--color-ink)]/55">
+        <span className="mb-2 text-[13.5px] text-white/55">
           {PLANS.base.period}
         </span>
       </div>
 
       <Link
         href="/#download"
-        className="mt-8 inline-flex h-12 items-center justify-center rounded-full border border-black/[0.08] bg-white text-[14.5px] font-semibold text-[var(--color-ink)] transition-colors hover:border-black/[0.2] hover:bg-black/[0.02]"
+        className="mt-8 inline-flex h-12 items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.04] text-[14.5px] font-semibold text-white transition-colors hover:border-white/[0.25] hover:bg-white/[0.08]"
       >
         {PLANS.base.cta}
       </Link>
@@ -132,12 +132,12 @@ function ProCard() {
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
       className={cn(
-        "relative flex h-full flex-col rounded-[28px] bg-white p-8 sm:p-10",
-        "shadow-[0_0_0_1.5px_var(--color-gold-400),0_30px_80px_-30px_rgba(201,161,74,0.45)]"
+        "relative flex h-full flex-col rounded-[28px] bg-[#0a0a0c] p-8 sm:p-10",
+        "shadow-[0_0_0_1.5px_var(--color-gold-400),0_30px_80px_-30px_rgba(201,161,74,0.55)]"
       )}
       style={{
         backgroundImage:
-          "linear-gradient(180deg, rgba(251,246,233,0.35) 0%, rgba(255,255,255,0) 40%)",
+          "linear-gradient(180deg, rgba(201,161,74,0.10) 0%, rgba(10,10,12,0) 40%)",
       }}
     >
       {/* Gold corner label */}
@@ -153,28 +153,28 @@ function ProCard() {
         Выбор фаундера
       </span>
 
-      <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-gold-700)]">
+      <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-gold-300)]">
         <span
           className="h-1.5 w-1.5 rounded-full"
-          style={{ background: "var(--color-gold-500)" }}
+          style={{ background: "var(--color-gold-400)" }}
         />
         Премиум
       </div>
-      <h3 className="mt-4 text-[28px] font-semibold tracking-tight text-[var(--color-ink)]">
+      <h3 className="mt-4 text-[28px] font-semibold tracking-tight text-white">
         {PLANS.pro.name}
       </h3>
-      <p className="mt-2 text-[14.5px] text-[var(--color-ink)]/55">
+      <p className="mt-2 text-[14.5px] text-white/55">
         {PLANS.pro.tagline}
       </p>
 
       <div className="mt-8 flex items-end gap-2">
-        <span className="text-[56px] font-semibold leading-none tracking-tight text-[var(--color-ink)]">
+        <span className="text-[56px] font-semibold leading-none tracking-tight text-white">
           {PLANS.pro.price}
-          <span className="text-[26px] align-top text-[var(--color-ink)]/60">
+          <span className="text-[26px] align-top text-white/55">
             ₽
           </span>
         </span>
-        <span className="mb-2 text-[13.5px] text-[var(--color-ink)]/55">
+        <span className="mb-2 text-[13.5px] text-white/55">
           {PLANS.pro.period}
         </span>
       </div>
@@ -212,12 +212,14 @@ function FeatureItem({
   premium?: boolean;
 }) {
   return (
-    <li className="flex items-start gap-3 text-[14px] leading-relaxed text-[var(--color-ink)]/80">
+    <li className="flex items-start gap-3 text-[14px] leading-relaxed text-white/80">
       <span
         className="mt-[3px] grid h-4 w-4 flex-none place-items-center rounded-full"
         style={{
-          background: premium ? "var(--color-gold-100)" : "var(--color-teal-50)",
-          color: premium ? "var(--color-gold-700)" : "var(--color-teal-700)",
+          background: premium
+            ? "rgba(201,161,74,0.18)"
+            : "rgba(27,170,150,0.16)",
+          color: premium ? "var(--color-gold-300)" : "var(--color-teal-300)",
         }}
       >
         <svg width="9" height="9" viewBox="0 0 10 10" fill="none">

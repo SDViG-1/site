@@ -11,8 +11,12 @@ export function Gamification() {
     <section
       id="dopamine"
       ref={ref}
-      className="relative overflow-hidden bg-[var(--color-cream)] py-28 sm:py-36"
+      className="relative overflow-hidden bg-[#030303] py-28 sm:py-36"
     >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_20%,rgba(201,161,74,0.08),transparent_55%)]"
+      />
       {/* Background orbiting hex outlines */}
       <BackgroundHexagons />
 
@@ -21,7 +25,7 @@ export function Gamification() {
           initial={{ opacity: 0, y: 12 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="inline-flex items-center gap-2 rounded-full border border-black/[0.06] bg-white px-3 py-1 text-[12px] font-medium text-[var(--color-ink)]/70"
+          className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-[12px] font-medium text-white/70"
         >
           <span
             className="h-1.5 w-1.5 rounded-full"
@@ -34,12 +38,12 @@ export function Gamification() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
-          className="max-w-[22ch] text-[36px] font-semibold leading-[1.05] tracking-[-0.02em] text-[var(--color-ink)] sm:text-[52px] lg:text-[64px]"
+          className="max-w-[22ch] text-[36px] font-semibold leading-[1.05] tracking-[-0.02em] text-white sm:text-[52px] lg:text-[64px]"
         >
           Каждое завершённое дело — шаг к уровню{" "}
           <span
             style={{ fontFamily: "var(--font-display)", fontStyle: "italic" }}
-            className="font-normal text-[var(--color-gold-600)]"
+            className="font-normal text-[var(--color-gold-300)]"
           >
             Мастер
           </span>
@@ -50,7 +54,7 @@ export function Gamification() {
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.18 }}
-          className="max-w-[58ch] text-[16.5px] leading-relaxed text-[var(--color-ink)]/60"
+          className="max-w-[58ch] text-[16.5px] leading-relaxed text-white/60"
         >
           SDViGApp coin — тихая валюта прогресса. Ты получаешь её за фокус,
           привычки и честные шаги. Без ярких баннеров, без назойливых пушей —
@@ -66,7 +70,7 @@ export function Gamification() {
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.7 }}
-          className="mt-8 flex flex-wrap items-center justify-center gap-6 text-[13px] text-[var(--color-ink)]/55"
+          className="mt-8 flex flex-wrap items-center justify-center gap-6 text-[13px] text-white/55"
         >
           <Stat value="14" label="дней подряд" />
           <Divider />
@@ -82,10 +86,10 @@ export function Gamification() {
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <span className="flex flex-col items-center leading-tight">
-      <span className="text-[24px] font-semibold tracking-tight text-[var(--color-ink)]">
+      <span className="text-[24px] font-semibold tracking-tight text-white">
         {value}
       </span>
-      <span className="mt-1 text-[11.5px] font-medium uppercase tracking-[0.18em] text-[var(--color-ink)]/50">
+      <span className="mt-1 text-[11.5px] font-medium uppercase tracking-[0.18em] text-white/50">
         {label}
       </span>
     </span>
@@ -99,7 +103,7 @@ function Divider() {
       className="h-10 w-px"
       style={{
         background:
-          "linear-gradient(to bottom, transparent, rgba(10,10,12,0.12), transparent)",
+          "linear-gradient(to bottom, transparent, rgba(255,255,255,0.18), transparent)",
       }}
     />
   );
@@ -131,7 +135,7 @@ function HexCoin({ inView }: { inView: boolean }) {
         initial={{ opacity: 0, y: 8 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6, delay: 1.2 }}
-        className="absolute left-1/2 top-[-32px] -translate-x-1/2 whitespace-nowrap text-[10.5px] font-semibold uppercase tracking-[0.26em] text-[var(--color-gold-700)]"
+        className="absolute left-1/2 top-[-32px] -translate-x-1/2 whitespace-nowrap text-[10.5px] font-semibold uppercase tracking-[0.26em] text-[var(--color-gold-300)]"
       >
         Уровень · Мастер
       </motion.div>
@@ -315,7 +319,7 @@ function OrbitBadges({ inView }: { inView: boolean }) {
               delay: b.delay,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="whitespace-nowrap rounded-2xl border border-black/[0.05] bg-white px-3.5 py-2 shadow-[0_10px_30px_-14px_rgba(10,10,12,0.25)]"
+            className="whitespace-nowrap rounded-2xl border border-white/[0.08] bg-[#0a0a0c]/90 px-3.5 py-2 shadow-[0_10px_30px_-14px_rgba(0,0,0,0.6)] backdrop-blur-md"
           >
             <motion.div
               animate={{ y: [0, -4, 0] }}
@@ -344,10 +348,10 @@ function OrbitBadges({ inView }: { inView: boolean }) {
                 </svg>
               </span>
               <div className="flex flex-col leading-tight">
-                <span className="text-[12px] font-semibold text-[var(--color-ink)]">
+                <span className="text-[12px] font-semibold text-white">
                   {b.label}
                 </span>
-                <span className="text-[10.5px] text-[var(--color-ink)]/50">
+                <span className="text-[10.5px] text-white/55">
                   {b.sub}
                 </span>
               </div>
@@ -404,12 +408,12 @@ function HexOutline({ size }: { size: number }) {
     <svg width={size} height={size * 0.96} viewBox="0 0 200 192" fill="none">
       <path
         d="M100 8 L173 50 L173 142 L100 184 L27 142 L27 50 Z"
-        stroke="rgba(201,161,74,0.5)"
+        stroke="rgba(216,184,102,0.28)"
         strokeWidth="0.8"
       />
       <path
         d="M100 32 L152 62 L152 130 L100 160 L48 130 L48 62 Z"
-        stroke="rgba(201,161,74,0.28)"
+        stroke="rgba(216,184,102,0.18)"
         strokeWidth="0.6"
       />
     </svg>

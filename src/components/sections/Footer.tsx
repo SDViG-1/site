@@ -55,26 +55,26 @@ const SOCIAL = [
 
 export function Footer() {
   return (
-    <footer className="relative bg-[var(--color-paper)] pt-20 sm:pt-28">
+    <footer className="relative bg-[#030303] pt-20 sm:pt-28">
       {/* Pre-footer CTA */}
       <div className="mx-auto w-full max-w-[1200px] px-6">
-        <div className="relative overflow-hidden rounded-[32px] border border-black/[0.06] bg-[var(--color-cream)] p-10 sm:p-14">
-          <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full opacity-50 blur-3xl"
+        <div className="relative overflow-hidden rounded-[32px] border border-white/[0.08] bg-[#0a0a0c] p-10 sm:p-14">
+          <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full opacity-70 blur-3xl"
             style={{
               background:
-                "radial-gradient(closest-side, rgba(56,196,176,0.28), transparent 70%)",
+                "radial-gradient(closest-side, rgba(56,196,176,0.22), transparent 70%)",
             }}
           />
           <div className="relative flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">
             <div className="max-w-[52ch]">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--color-ink)]/45">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-white/50">
                 Без суеты
               </div>
-              <h3 className="mt-3 text-[34px] font-semibold leading-[1.05] tracking-[-0.02em] text-[var(--color-ink)] sm:text-[44px]">
+              <h3 className="mt-3 text-[34px] font-semibold leading-[1.05] tracking-[-0.02em] text-white sm:text-[44px]">
                 Начни с сегодняшнего
                 <span
                   style={{ fontFamily: "var(--font-display)", fontStyle: "italic" }}
-                  className="font-normal"
+                  className="font-normal text-white/80"
                 >
                   {" "}утра
                 </span>
@@ -94,7 +94,7 @@ export function Footer() {
               </Link>
               <a
                 href="#pricing"
-                className="inline-flex h-12 items-center justify-center rounded-full border border-black/[0.1] bg-white px-5 text-[14.5px] font-semibold text-[var(--color-ink)] transition-colors hover:border-black/[0.2]"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.04] px-5 text-[14.5px] font-semibold text-white transition-colors hover:border-white/[0.25] hover:bg-white/[0.08]"
               >
                 Сравнить тарифы
               </a>
@@ -103,12 +103,12 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto mt-24 w-full max-w-[1200px] border-t border-black/[0.08] px-6 pb-10 pt-14">
+      <div className="mx-auto mt-24 w-full max-w-[1200px] border-t border-white/[0.08] px-6 pb-10 pt-14">
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:grid-cols-6">
           {/* Brand */}
           <div className="col-span-2 flex flex-col gap-4">
             <Logo />
-            <p className="max-w-[36ch] text-[13px] leading-relaxed text-[var(--color-ink)]/55">
+            <p className="max-w-[36ch] text-[13px] leading-relaxed text-white/55">
               SDViGApp — это спокойный инструмент ежедневной продуктивности.
               Разработано в Лиссабоне, уважает твоё внимание.
             </p>
@@ -118,7 +118,7 @@ export function Footer() {
                   key={s.icon}
                   href={s.href}
                   aria-label={s.label}
-                  className="grid h-9 w-9 place-items-center rounded-full border border-black/[0.08] text-[var(--color-ink)]/65 transition-colors hover:border-black/[0.2] hover:text-[var(--color-ink)]"
+                  className="grid h-9 w-9 place-items-center rounded-full border border-white/[0.1] text-white/65 transition-colors hover:border-white/[0.22] hover:text-white"
                 >
                   <SocialIcon kind={s.icon} />
                 </a>
@@ -128,7 +128,7 @@ export function Footer() {
 
           {COLUMNS.map((col) => (
             <div key={col.title} className="flex flex-col gap-3">
-              <h4 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--color-ink)]/50">
+              <h4 className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/50">
                 {col.title}
               </h4>
               <ul className="flex flex-col gap-2">
@@ -136,7 +136,7 @@ export function Footer() {
                   <li key={l.label}>
                     <a
                       href={l.href}
-                      className="text-[13.5px] text-[var(--color-ink)]/70 transition-colors hover:text-[var(--color-ink)]"
+                      className="text-[13.5px] text-white/65 transition-colors hover:text-white"
                     >
                       {l.label}
                     </a>
@@ -148,15 +148,15 @@ export function Footer() {
         </div>
 
         {/* Disclosure */}
-        <div className="mt-14 flex flex-col items-start justify-between gap-5 border-t border-black/[0.06] pt-8 sm:flex-row sm:items-center">
-          <p className="text-[12px] text-[var(--color-ink)]/50">
+        <div className="mt-14 flex flex-col items-start justify-between gap-5 border-t border-white/[0.06] pt-8 sm:flex-row sm:items-center">
+          <p className="text-[12px] text-white/45">
             © 2026 SDViGApp Method, Lda. All rights reserved. NIPC 516 824 221. Av.
             da Liberdade 10, 1250-147 Lisboa, Portugal.
           </p>
-          <div className="flex items-center gap-5 text-[12px] text-[var(--color-ink)]/50">
+          <div className="flex items-center gap-5 text-[12px] text-white/45">
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 transition-colors hover:text-[var(--color-ink)]"
+              className="inline-flex items-center gap-1.5 transition-colors hover:text-white"
             >
               <GlobeIcon />
               Русский
@@ -164,14 +164,14 @@ export function Footer() {
             <span className="inline-flex items-center gap-1.5">
               <span
                 className="inline-block h-1.5 w-1.5 rounded-full"
-                style={{ background: "var(--color-teal-500)" }}
+                style={{ background: "var(--color-teal-400)" }}
               />
               Все системы в норме
             </span>
           </div>
         </div>
 
-        <p className="mt-6 max-w-[82ch] text-[11px] leading-relaxed text-[var(--color-ink)]/35">
+        <p className="mt-6 max-w-[82ch] text-[11px] leading-relaxed text-white/30">
           SDViGApp не является средством диагностики, лечения или профилактики
           заболеваний. Продукт помогает организовать режим дня и поддерживать
           здоровые привычки. Для клинических вопросов обратитесь к специалисту.

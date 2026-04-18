@@ -11,18 +11,18 @@ export function Privacy() {
     <section
       id="privacy"
       ref={ref}
-      className="relative bg-[var(--color-paper)] py-28 sm:py-36"
+      className="relative bg-[#030303] py-28 sm:py-36"
     >
       <div className="mx-auto flex w-full max-w-[880px] flex-col items-center gap-8 px-6 text-center">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 rounded-full border border-black/[0.06] bg-white px-3 py-1 text-[12px] font-medium text-[var(--color-ink)]/70"
+          className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-[12px] font-medium text-white/70"
         >
           <span
             className="h-1.5 w-1.5 rounded-full"
-            style={{ background: "var(--color-teal-500)" }}
+            style={{ background: "var(--color-teal-400)" }}
           />
           Сейф
         </motion.span>
@@ -33,7 +33,7 @@ export function Privacy() {
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.9 }}
-          className="max-w-[22ch] text-[34px] font-semibold leading-[1.08] tracking-[-0.02em] text-[var(--color-ink)] sm:text-[46px] lg:text-[56px]"
+          className="max-w-[22ch] text-[34px] font-semibold leading-[1.08] tracking-[-0.02em] text-white sm:text-[46px] lg:text-[56px]"
         >
           Твои данные — только&nbsp;твои.
         </motion.h2>
@@ -42,7 +42,7 @@ export function Privacy() {
           initial={{ opacity: 0, y: 14 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 1.0 }}
-          className="max-w-[56ch] text-[16.5px] leading-relaxed text-[var(--color-ink)]/60"
+          className="max-w-[56ch] text-[16.5px] leading-relaxed text-white/60"
         >
           Дневник, задачи и финансы живут на устройстве. Синхронизация — по
           сквозному шифрованию: ключ мы не храним и не видим. Без трекеров, без
@@ -90,7 +90,7 @@ function Lock({ inView }: { inView: boolean }) {
         className="pointer-events-none absolute inset-0 rounded-full blur-3xl"
         style={{
           background:
-            "radial-gradient(closest-side, rgba(27,170,150,0.22), transparent 70%)",
+            "radial-gradient(closest-side, rgba(27,170,150,0.32), transparent 70%)",
         }}
       />
 
@@ -102,8 +102,8 @@ function Lock({ inView }: { inView: boolean }) {
       >
         <defs>
           <linearGradient id="lockBody" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#1f2024" />
-            <stop offset="100%" stopColor="#0a0a0c" />
+            <stop offset="0%" stopColor="#2a2b30" />
+            <stop offset="100%" stopColor="#121214" />
           </linearGradient>
           <linearGradient id="lockShackle" x1="0" x2="0" y1="0" y2="1">
             <stop offset="0%" stopColor="#2a2b30" />
@@ -175,7 +175,7 @@ function Lock({ inView }: { inView: boolean }) {
             height="86"
             rx="18"
             fill="none"
-            stroke="rgba(255,255,255,0.06)"
+            stroke="rgba(255,255,255,0.12)"
             strokeWidth="1"
           />
 
@@ -211,16 +211,20 @@ function Lock({ inView }: { inView: boolean }) {
           cy="172"
           rx="44"
           ry="4"
-          fill="rgba(10,10,12,0.12)"
+          fill="rgba(0,0,0,0.55)"
         />
       </svg>
 
-      {/* Click label — appears briefly */}
+      {/* Подпись после «щелчка» — остаётся на замке */}
       <motion.span
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={inView ? { opacity: [0, 1, 0], scale: [0.9, 1, 1] } : {}}
-        transition={{ duration: 1.2, delay: 1.05 }}
-        className="pointer-events-none absolute left-1/2 top-[44%] -translate-x-1/2 whitespace-nowrap rounded-full border border-black/[0.06] bg-white/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-teal-700)] shadow-[0_6px_18px_-8px_rgba(10,10,12,0.2)]"
+        initial={{ opacity: 0, scale: 0.92 }}
+        animate={inView ? { opacity: 1, scale: 1 } : {}}
+        transition={{
+          duration: 0.5,
+          delay: 1.12,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        className="pointer-events-none absolute left-1/2 top-[44%] -translate-x-1/2 whitespace-nowrap rounded-full border border-white/[0.1] bg-[#0a0a0c]/90 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-teal-300)] shadow-[0_6px_18px_-8px_rgba(0,0,0,0.6)] backdrop-blur-md"
       >
         Защищено
       </motion.span>
@@ -238,14 +242,14 @@ function Pillar({
   desc: string;
 }) {
   return (
-    <div className="flex flex-col items-center gap-2 rounded-2xl border border-black/[0.05] bg-white p-5 text-center">
-      <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--color-cream)] text-[var(--color-ink)]/80">
+    <div className="flex flex-col items-center gap-2 rounded-2xl border border-white/[0.07] bg-[#0a0a0c] p-5 text-center">
+      <span className="grid h-9 w-9 place-items-center rounded-xl bg-white/[0.05] text-white/80">
         {icon}
       </span>
-      <span className="mt-1 text-[14px] font-semibold text-[var(--color-ink)]">
+      <span className="mt-1 text-[14px] font-semibold text-white">
         {title}
       </span>
-      <span className="text-[12.5px] leading-relaxed text-[var(--color-ink)]/55">
+      <span className="text-[12.5px] leading-relaxed text-white/55">
         {desc}
       </span>
     </div>

@@ -32,7 +32,7 @@ function NavCell({
     return (
       <div
         aria-hidden="true"
-        className="hidden min-h-[110px] rounded-[20px] border border-dashed border-black/[0.06] sm:block"
+        className="hidden min-h-[110px] rounded-[20px] border border-dashed border-white/[0.08] sm:block"
       />
     );
   }
@@ -41,11 +41,11 @@ function NavCell({
     <Link
       href={`/guides/${article.slug}`}
       aria-label={`${labelText}: ${article.title}`}
-      className="group relative flex min-h-[110px] flex-col justify-center gap-2 overflow-hidden rounded-[20px] border border-black/[0.06] bg-white p-5 transition-[border-color,box-shadow,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-black/[0.12] hover:bg-[var(--color-cream)] hover:shadow-[0_20px_40px_-24px_rgba(10,10,12,0.12)] sm:p-6"
+      className="group relative flex min-h-[110px] flex-col justify-center gap-2 overflow-hidden rounded-[20px] border border-white/[0.08] bg-[#0a0a0c] p-5 transition-[border-color,box-shadow,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-white/[0.18] hover:bg-[#121216] hover:shadow-[0_20px_40px_-24px_rgba(0,0,0,0.6)] sm:p-6"
       style={{ textAlign: isPrev ? "left" : "right" }}
     >
       <span
-        className={`flex items-center gap-2 text-[11.5px] font-semibold uppercase tracking-[0.18em] text-[var(--color-ink)]/45 ${
+        className={`flex items-center gap-2 text-[11.5px] font-semibold uppercase tracking-[0.18em] text-white/50 ${
           isPrev ? "" : "justify-end"
         }`}
       >
@@ -53,7 +53,7 @@ function NavCell({
         {labelText}
         {!isPrev && <Arrow direction="right" className="group-hover:translate-x-1.5" />}
       </span>
-      <span className="text-[16.5px] font-semibold leading-[1.25] tracking-[-0.005em] text-[var(--color-ink)] sm:text-[17.5px]">
+      <span className="text-[16.5px] font-semibold leading-[1.25] tracking-[-0.005em] text-white sm:text-[17.5px]">
         {article.title}
       </span>
     </Link>
@@ -69,7 +69,7 @@ function Arrow({
 }) {
   return (
     <span
-      className={`inline-block text-[var(--color-ink)]/55 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+      className={`inline-block text-white/55 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
         className ?? ""
       }`}
     >

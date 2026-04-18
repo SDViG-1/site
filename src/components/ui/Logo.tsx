@@ -12,13 +12,13 @@ export function Logo({ className, compact = false }: LogoProps) {
       href="/#top"
       aria-label="SDViGApp — на главную"
       className={cn(
-        "group inline-flex items-center gap-2 text-[var(--color-ink)]",
+        "group inline-flex items-center gap-2 text-white",
         className
       )}
     >
       <span
         className={cn(
-          "relative block overflow-hidden rounded-[10px] bg-black",
+          "relative block overflow-hidden rounded-[10px] bg-black ring-1 ring-white/10",
           compact ? "h-7 w-7" : "h-8 w-8"
         )}
       >

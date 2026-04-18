@@ -2,7 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { PhoneMockup } from "@/components/visual/PhoneMockup";
+import { Circle } from "lucide-react";
+import {
+  ElegantShape,
+  heroFadeUpVariants,
+} from "@/components/ui/shape-landing-hero";
 
 const MORPH_WORDS = ["хаоса", "выгорания", "прокрастинации"];
 
@@ -10,134 +14,143 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="relative isolate overflow-hidden pt-28 sm:pt-36 lg:pt-40"
+      className="relative isolate min-h-[100dvh] w-full overflow-hidden bg-[#030303] pt-28 sm:pt-36 lg:pt-40"
     >
-      {/* Background — soft teal blurs */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
-      >
-        <div
-          className="absolute -right-40 -top-20 h-[520px] w-[520px] rounded-full opacity-60 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(closest-side, rgba(56,196,176,0.35), transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute -left-32 top-40 h-[420px] w-[420px] rounded-full opacity-50 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(closest-side, rgba(109,220,202,0.28), transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute left-1/2 top-[40%] h-[680px] w-[680px] -translate-x-1/2 rounded-full opacity-40 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(closest-side, rgba(27,170,150,0.22), transparent 65%)",
-          }}
-        />
+        className="pointer-events-none absolute inset-0 bg-gradient-to-br from-orange-500/[0.08] via-transparent to-teal-500/[0.06] blur-3xl"
+      />
 
-        {/* Subtle grid */}
-        <div
-          className="absolute inset-0 opacity-[0.025]"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, #0a0a0c 1px, transparent 1px), linear-gradient(to bottom, #0a0a0c 1px, transparent 1px)",
-            backgroundSize: "64px 64px",
-            maskImage:
-              "radial-gradient(ellipse at 50% 20%, black 45%, transparent 75%)",
-            WebkitMaskImage:
-              "radial-gradient(ellipse at 50% 20%, black 45%, transparent 75%)",
-          }}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <ElegantShape
+          delay={0.3}
+          width={600}
+          height={140}
+          rotate={12}
+          gradient="from-orange-500/[0.14]"
+          className="left-[-10%] top-[15%] md:left-[-5%] md:top-[20%]"
+        />
+        <ElegantShape
+          delay={0.5}
+          width={500}
+          height={120}
+          rotate={-15}
+          gradient="from-teal-500/[0.12]"
+          className="right-[-5%] top-[70%] md:right-[0%] md:top-[75%]"
+        />
+        <ElegantShape
+          delay={0.4}
+          width={300}
+          height={80}
+          rotate={-8}
+          gradient="from-amber-500/[0.14]"
+          className="left-[5%] bottom-[5%] md:left-[10%] md:bottom-[10%]"
+        />
+        <ElegantShape
+          delay={0.6}
+          width={200}
+          height={60}
+          rotate={20}
+          gradient="from-orange-400/[0.12]"
+          className="right-[15%] top-[10%] md:right-[20%] md:top-[15%]"
+        />
+        <ElegantShape
+          delay={0.7}
+          width={150}
+          height={40}
+          rotate={-25}
+          gradient="from-amber-400/[0.1]"
+          className="left-[20%] top-[5%] md:left-[25%] md:top-[10%]"
         />
       </div>
 
-      <div className="mx-auto grid w-full max-w-[1200px] grid-cols-1 items-center gap-12 px-6 pb-4 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20 lg:pb-6">
-        {/* Left: copy */}
-        <div className="flex flex-col">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="inline-flex w-fit items-center gap-2 rounded-full border border-black/[0.06] bg-white/60 px-3 py-1 text-[12px] font-medium text-[var(--color-ink)]/70 backdrop-blur-xl"
-          >
-            <span
-              className="inline-block h-1.5 w-1.5 rounded-full"
-              style={{ background: "var(--color-teal-500)" }}
-            />
+      <div className="relative z-10 mx-auto flex w-full max-w-[960px] flex-col items-center px-6 pb-16 text-center lg:pb-24">
+        <motion.div
+          custom={0}
+          variants={heroFadeUpVariants}
+          initial="hidden"
+          animate="visible"
+          className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 md:mb-10"
+        >
+          <Circle className="h-2 w-2 fill-amber-500/90 text-amber-500/90" />
+          <span className="text-[12px] font-medium tracking-wide text-white/60">
             Новая версия · v2.4 «Дыхание»
-          </motion.div>
+          </span>
+        </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
-            className="mt-5 text-[46px] font-semibold leading-[1.02] tracking-[-0.02em] text-[var(--color-ink)] sm:text-[64px] lg:text-[80px]"
-          >
-            <span className="block">Вытащи себя</span>
-            <span className="block">
+        <motion.div
+          custom={1}
+          variants={heroFadeUpVariants}
+          initial="hidden"
+          animate="visible"
+          className="w-full"
+        >
+          <h1 className="text-[46px] font-semibold leading-[1.02] tracking-[-0.02em] sm:text-[64px] lg:text-[80px]">
+            <span className="block bg-gradient-to-b from-white to-white/75 bg-clip-text text-transparent">
+              Вытащи себя
+            </span>
+            <span className="mt-1 block text-white/90">
               из&nbsp;
               <MorphWord words={MORPH_WORDS} />
             </span>
-          </motion.h1>
+          </h1>
+        </motion.div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.18 }}
-            className="mt-6 max-w-[520px] text-[16.5px] leading-relaxed text-[var(--color-ink)]/60 sm:text-[17.5px]"
-          >
-            SDViGApp — это спокойный инструмент продуктивности. Разбирает утро,
-            день и вечер на честные шаги. Убирает инерцию, возвращает фокус,
-            мягко ведёт к ритму, в котором ты снова чувствуешь себя собой.
-          </motion.p>
+        <motion.p
+          custom={2}
+          variants={heroFadeUpVariants}
+          initial="hidden"
+          animate="visible"
+          className="mt-8 max-w-[520px] text-[16.5px] font-light leading-relaxed tracking-wide text-white/45 sm:text-[17.5px]"
+        >
+          SDViGApp — это спокойный инструмент продуктивности. Разбирает утро,
+          день и вечер на честные шаги. Убирает инерцию, возвращает фокус,
+          мягко ведёт к ритму, в котором ты снова чувствуешь себя собой.
+        </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.28 }}
-            className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center"
-          >
-            <StoreButton store="apple" />
-            <StoreButton store="google" />
-          </motion.div>
+        <motion.div
+          custom={3}
+          variants={heroFadeUpVariants}
+          initial="hidden"
+          animate="visible"
+          className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:items-center"
+        >
+          <StoreButton store="apple" />
+          <StoreButton store="google" />
+        </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.45 }}
-            className="mt-8 flex items-center gap-4 text-[12.5px] text-[var(--color-ink)]/50"
-          >
-            <div className="flex -space-x-2">
-              {["#C9A14A", "#1baa96", "#0f7267"].map((c, i) => (
-                <span
-                  key={i}
-                  className="grid h-6 w-6 place-items-center rounded-full border-2 border-white text-[10px] font-semibold text-white"
-                  style={{ background: c }}
-                >
-                  {["Н", "И", "М"][i]}
-                </span>
-              ))}
-            </div>
-            <span>
-              <strong className="font-semibold text-[var(--color-ink)]/75">
-                12&nbsp;400+
-              </strong>{" "}
-              человек уже дышат ровнее
-            </span>
-          </motion.div>
-        </div>
-
-        {/* Right: phone */}
-        <div className="relative flex items-center justify-center py-8 lg:py-0">
-          <PhoneMockup />
-        </div>
+        <motion.div
+          custom={4}
+          variants={heroFadeUpVariants}
+          initial="hidden"
+          animate="visible"
+          className="mt-10 flex flex-wrap items-center justify-center gap-4 text-[12.5px] text-white/45"
+        >
+          <div className="flex -space-x-2">
+            {["#C9A14A", "#1baa96", "#0f7267"].map((c, i) => (
+              <span
+                key={i}
+                className="grid h-6 w-6 place-items-center rounded-full border-2 border-[#030303] text-[10px] font-semibold text-white"
+                style={{ background: c }}
+              >
+                {["Н", "И", "М"][i]}
+              </span>
+            ))}
+          </div>
+          <span>
+            <strong className="font-semibold text-white/70">12&nbsp;400+</strong>{" "}
+            человек уже дышат ровнее
+          </span>
+        </motion.div>
       </div>
+
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303]/80" />
     </section>
   );
 }
+
+const morphWordClass =
+  "bg-gradient-to-r from-orange-400 via-amber-400 to-amber-600 bg-clip-text text-transparent";
 
 function MorphWord({ words }: { words: readonly string[] }) {
   const reduceMotion = useReducedMotion();
@@ -162,11 +175,10 @@ function MorphWordStatic({ words }: { words: readonly string[] }) {
         прокрастинации
       </span>
       <span
-        className="absolute inset-0 whitespace-nowrap italic"
+        className={`absolute inset-0 whitespace-nowrap italic ${morphWordClass}`}
         style={{
           fontFamily: "var(--font-display)",
           fontWeight: 400,
-          color: "var(--color-teal-600)",
           letterSpacing: "-0.01em",
         }}
       >
@@ -218,18 +230,17 @@ function MorphWordTypewriter({ words }: { words: readonly string[] }) {
         прокрастинации
       </span>
       <span
-        className="absolute inset-0 whitespace-nowrap italic"
+        className={`absolute inset-0 whitespace-nowrap italic ${morphWordClass}`}
         style={{
           fontFamily: "var(--font-display)",
           fontWeight: 400,
-          color: "var(--color-teal-600)",
           letterSpacing: "-0.01em",
         }}
       >
         {display}
         <span
           aria-hidden="true"
-          className="typewriter-caret ml-[2px] inline-block h-[0.72em] w-[2px] translate-y-[0.08em] rounded-sm bg-[var(--color-teal-600)] align-baseline"
+          className="typewriter-caret ml-[2px] inline-block h-[0.72em] w-[2px] translate-y-[0.08em] rounded-sm bg-amber-400 align-baseline"
         />
       </span>
     </span>
@@ -238,17 +249,21 @@ function MorphWordTypewriter({ words }: { words: readonly string[] }) {
 
 function StoreButton({ store }: { store: "apple" | "google" }) {
   const isApple = store === "apple";
+  const href = isApple
+    ? "https://apps.apple.com/app/sdvigapp/id0"
+    : "https://play.google.com/store/apps/details?id=app.sdvig";
   return (
     <motion.a
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.98 }}
       transition={{ type: "spring", stiffness: 500, damping: 30 }}
-      href={isApple ? "#apple" : "#google"}
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
       aria-label={isApple ? "Скачать в App Store" : "Скачать в Google Play"}
-      className="inline-flex h-14 items-center gap-3 rounded-2xl px-5 text-white shadow-[0_14px_30px_-18px_rgba(10,10,12,0.8)] transition-colors"
+      className="inline-flex h-14 items-center gap-3 rounded-2xl border border-white/[0.08] px-5 text-white shadow-[0_14px_30px_-18px_rgba(0,0,0,0.85)] transition-colors"
       style={{
-        background:
-          "linear-gradient(180deg, #1b1b1e 0%, #0a0a0c 100%)",
+        background: "linear-gradient(180deg, #1b1b1e 0%, #0a0a0c 100%)",
       }}
     >
       <span className="grid h-7 w-7 place-items-center">

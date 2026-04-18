@@ -1,22 +1,94 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { cn } from "@/lib/utils";
+
+/** Та же идея, что у container-scroll: прогресс скролла → rotateX / scale / translateY на своих карточках */
+function ScrollTiltPanel({
+  className,
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+  const [compact, setCompact] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    const sync = () => setCompact(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const tilt = reduceMotion ? 0 : compact ? 12 : 16;
+  const rotateX = useTransform(scrollYProgress, [0, 1], [tilt, 0]);
+  const scale = useTransform(
+    scrollYProgress,
+    [0, 1],
+    reduceMotion ? [1, 1] : compact ? [0.93, 1] : [0.94, 1]
+  );
+  const translateY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    reduceMotion ? [0, 0] : compact ? [20, 0] : [28, 0]
+  );
+
+  return (
+    <div
+      ref={ref}
+      className={cn("min-h-0", className)}
+      style={{ perspective: "1000px" }}
+    >
+      <motion.div
+        className="h-full will-change-transform [transform-style:preserve-3d]"
+        style={{
+          rotateX,
+          scale,
+          translateY,
+          transformOrigin: "50% 42%",
+        }}
+      >
+        {children}
+      </motion.div>
+    </div>
+  );
+}
 
 export function Ecosystem() {
   return (
     <section
       id="ecosystem"
-      className="relative bg-[var(--color-paper)] py-24 sm:py-32"
+      className="relative bg-[#030303] py-24 sm:py-32"
     >
       <div className="mx-auto w-full max-w-[1200px] px-6">
         <SectionHeader />
         <div className="mt-14 grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-6">
-          <MorningEveningCard className="md:col-span-4" />
-          <FocusCard className="md:col-span-2" />
-          <WellbeingCard className="md:col-span-2" />
-          <InboxFinanceCard className="md:col-span-4" />
+          <ScrollTiltPanel className="md:col-span-4">
+            <MorningEveningCard />
+          </ScrollTiltPanel>
+          <ScrollTiltPanel className="md:col-span-2">
+            <FocusCard />
+          </ScrollTiltPanel>
+          <ScrollTiltPanel className="md:col-span-2">
+            <WellbeingCard />
+          </ScrollTiltPanel>
+          <ScrollTiltPanel className="md:col-span-4">
+            <InboxFinanceCard />
+          </ScrollTiltPanel>
         </div>
       </div>
     </section>
@@ -26,24 +98,24 @@ export function Ecosystem() {
 function SectionHeader() {
   return (
     <div className="flex flex-col items-start gap-5 sm:items-center sm:text-center">
-      <span className="inline-flex items-center gap-2 rounded-full border border-black/[0.06] bg-white px-3 py-1 text-[12px] font-medium text-[var(--color-ink)]/70">
+      <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-[12px] font-medium text-white/70">
         <span
           className="h-1.5 w-1.5 rounded-full"
-          style={{ background: "var(--color-teal-500)" }}
+          style={{ background: "var(--color-teal-400)" }}
         />
         Экосистема
       </span>
-      <h2 className="max-w-[22ch] text-[34px] font-semibold leading-[1.08] tracking-[-0.02em] text-[var(--color-ink)] sm:text-[44px] lg:text-[54px]">
+      <h2 className="max-w-[22ch] text-[34px] font-semibold leading-[1.08] tracking-[-0.02em] text-white sm:text-[44px] lg:text-[54px]">
         Четыре инструмента. Одна&nbsp;
         <span
           style={{ fontFamily: "var(--font-display)", fontStyle: "italic" }}
-          className="font-normal"
+          className="font-normal text-white/80"
         >
           тихая
         </span>{" "}
         ритм-машина.
       </h2>
-      <p className="max-w-[58ch] text-[16px] leading-relaxed text-[var(--color-ink)]/55 sm:text-[17px]">
+      <p className="max-w-[58ch] text-[16px] leading-relaxed text-white/55 sm:text-[17px]">
         Не 47 кнопок и дашбордов, а честный набор поверхностей, которые работают
         вместе: планирование дня, глубокий фокус, забота о себе и аккуратный
         учёт денег — чтобы дофамин не утекал.
@@ -71,8 +143,8 @@ function BentoCard({
       whileHover={{ scale: 1.015, y: -2 }}
       transition={{ type: "spring", stiffness: 320, damping: 28 }}
       className={cn(
-        "group relative flex min-h-[280px] overflow-hidden rounded-[28px] border border-black/[0.05] bg-white p-7 shadow-[0_1px_2px_rgba(10,10,12,0.04),0_24px_60px_-30px_rgba(10,10,12,0.12)] transition-shadow",
-        "hover:shadow-[0_1px_2px_rgba(10,10,12,0.06),0_30px_80px_-30px_rgba(10,10,12,0.2)]",
+        "group relative flex min-h-[280px] overflow-hidden rounded-[28px] border border-white/[0.07] bg-[#0a0a0c] p-7 shadow-[0_1px_2px_rgba(0,0,0,0.25),0_24px_60px_-30px_rgba(0,0,0,0.6)] transition-shadow",
+        "hover:border-white/[0.12] hover:shadow-[0_1px_2px_rgba(0,0,0,0.35),0_30px_80px_-30px_rgba(0,0,0,0.75)]",
         className
       )}
     >
@@ -83,12 +155,12 @@ function BentoCard({
 
 function CardEyebrow({ label, color = "teal" }: { label: string; color?: "teal" | "gold" }) {
   return (
-    <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-ink)]/45">
+    <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50">
       <span
         className="h-1.5 w-1.5 rounded-full"
         style={{
           background:
-            color === "gold" ? "var(--color-gold-400)" : "var(--color-teal-500)",
+            color === "gold" ? "var(--color-gold-400)" : "var(--color-teal-400)",
         }}
       />
       {label}
@@ -106,7 +178,7 @@ function CardTitle({
   return (
     <h3
       className={cn(
-        "mt-4 text-[22px] font-semibold leading-tight tracking-[-0.01em] text-[var(--color-ink)] sm:text-[24px]",
+        "mt-4 text-[22px] font-semibold leading-tight tracking-[-0.01em] text-white sm:text-[24px]",
         className
       )}
     >
@@ -117,7 +189,7 @@ function CardTitle({
 
 function CardDescription({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mt-2 max-w-[38ch] text-[14.5px] leading-relaxed text-[var(--color-ink)]/55">
+    <p className="mt-2 max-w-[38ch] text-[14.5px] leading-relaxed text-white/55">
       {children}
     </p>
   );
@@ -152,7 +224,7 @@ function MorningEveningCard({ className }: { className?: string }) {
         </div>
 
         <div className="relative mt-6 flex-1 sm:ml-8 sm:mt-0">
-          <div className="absolute -inset-4 -z-0 rounded-3xl bg-[linear-gradient(180deg,rgba(27,170,150,0.06),transparent)]" />
+          <div className="absolute -inset-4 -z-0 rounded-3xl bg-[linear-gradient(180deg,rgba(27,170,150,0.12),transparent)]" />
           <ul className="relative z-10 space-y-2">
             {TASKS.map((t, i) => (
               <TaskRow key={t.id} task={t} hovered={hovered} order={i} />
@@ -176,7 +248,7 @@ function TaskRow({
   const delay = 0.08 * order;
 
   return (
-    <li className="flex items-center gap-3 rounded-2xl border border-black/[0.05] bg-white px-4 py-3">
+    <li className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-4 py-3">
       <span className="relative grid h-5 w-5 place-items-center">
         <motion.span
           className="absolute inset-0 rounded-full"
@@ -184,10 +256,10 @@ function TaskRow({
           animate={{
             backgroundColor: hovered
               ? "rgba(27,170,150,1)"
-              : "rgba(255,255,255,1)",
+              : "rgba(255,255,255,0.04)",
             borderColor: hovered
               ? "rgba(27,170,150,1)"
-              : "rgba(10,10,12,0.18)",
+              : "rgba(255,255,255,0.22)",
           }}
           transition={{ duration: 0.35, delay: delay + 0.05 }}
           style={{ borderWidth: 1.5, borderStyle: "solid" }}
@@ -215,7 +287,7 @@ function TaskRow({
       <motion.span
         initial={false}
         animate={{
-          color: hovered ? "rgba(10,10,12,0.38)" : "rgba(10,10,12,0.92)",
+          color: hovered ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.92)",
         }}
         transition={{ duration: 0.35, delay: delay + 0.15 }}
         className="relative flex-1 text-[14px] font-medium"
@@ -233,7 +305,7 @@ function TaskRow({
           }}
         />
       </motion.span>
-      <span className="text-[12px] font-medium text-[var(--color-ink)]/40">
+      <span className="text-[12px] font-medium text-white/40">
         {task.time}
       </span>
     </li>
@@ -263,7 +335,7 @@ function FocusCard({ className }: { className?: string }) {
               cy="85"
               r={RADIUS}
               fill="none"
-              stroke="rgba(10,10,12,0.08)"
+              stroke="rgba(255,255,255,0.08)"
               strokeWidth="2"
             />
             <motion.circle
@@ -288,17 +360,17 @@ function FocusCard({ className }: { className?: string }) {
           </svg>
           <div className="pointer-events-none absolute inset-0 grid place-items-center">
             <div className="text-center">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-ink)]/45">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50">
                 Deep work
               </div>
               <motion.div
                 initial={false}
-                animate={{ color: hovered ? "var(--color-teal-700)" : "var(--color-ink)" }}
+                animate={{ color: hovered ? "var(--color-teal-300)" : "#ffffff" }}
                 className="mt-1 text-[32px] font-semibold tracking-tight"
               >
                 48:12
               </motion.div>
-              <div className="text-[11.5px] text-[var(--color-ink)]/45">из&nbsp;60:00</div>
+              <div className="text-[11.5px] text-white/45">из&nbsp;60:00</div>
             </div>
           </div>
         </div>
@@ -336,7 +408,7 @@ function WellbeingCard({ className }: { className?: string }) {
                 backgroundColor:
                   i <= current
                     ? "var(--color-teal-500)"
-                    : "rgba(10,10,12,0.08)",
+                    : "rgba(255,255,255,0.08)",
                 height: 18 + i * 10,
                 opacity: i <= current ? 1 : 0.6,
               }}
@@ -350,12 +422,12 @@ function WellbeingCard({ className }: { className?: string }) {
             />
           ))}
         </div>
-        <div className="mt-3 flex items-center justify-between text-[11.5px] text-[var(--color-ink)]/50">
+        <div className="mt-3 flex items-center justify-between text-[11.5px] text-white/55">
           <span>Понедельник</span>
           <span className="flex items-center gap-1.5">
             <span
               className="inline-block h-1.5 w-1.5 rounded-full"
-              style={{ background: "var(--color-teal-500)" }}
+              style={{ background: "var(--color-teal-400)" }}
             />
             Чувствую лучше
           </span>
@@ -405,16 +477,16 @@ function InboxFinanceCard({ className }: { className?: string }) {
         </div>
 
         <div className="mt-6 flex-1 sm:ml-8 sm:mt-0">
-          <div className="mb-3 flex items-center justify-between rounded-2xl border border-black/[0.04] bg-[var(--color-cream)] px-4 py-3">
+          <div className="mb-3 flex items-center justify-between rounded-2xl border border-white/[0.07] bg-white/[0.03] px-4 py-3">
             <div>
-              <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-[var(--color-ink)]/45">
+              <div className="text-[11px] font-medium uppercase tracking-[0.16em] text-white/45">
                 Баланс недели
               </div>
               <motion.div
                 initial={false}
                 animate={{ filter: hovered ? "blur(8px)" : "blur(0px)" }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-1 text-[22px] font-semibold tracking-tight text-[var(--color-ink)]"
+                className="mt-1 text-[22px] font-semibold tracking-tight text-white"
               >
                 18&nbsp;420&nbsp;₽
               </motion.div>
@@ -422,7 +494,7 @@ function InboxFinanceCard({ className }: { className?: string }) {
             <motion.span
               initial={false}
               animate={{ opacity: hovered ? 1 : 0 }}
-              className="inline-flex items-center gap-1.5 rounded-full border border-black/[0.06] bg-white px-2.5 py-1 text-[11px] font-semibold text-[var(--color-ink)]/70"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.05] px-2.5 py-1 text-[11px] font-semibold text-white/75"
             >
               <LockMiniIcon />
               Скрыто
@@ -450,15 +522,15 @@ function ExpenseRow({
   index: number;
 }) {
   return (
-    <li className="flex items-center gap-3 rounded-2xl border border-black/[0.05] bg-white px-4 py-3">
-      <span className="grid h-8 w-8 place-items-center rounded-xl bg-black/[0.04] text-[var(--color-ink)]/70">
+    <li className="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.03] px-4 py-3">
+      <span className="grid h-8 w-8 place-items-center rounded-xl bg-white/[0.05] text-white/70">
         <ExpenseIcon kind={expense.icon} />
       </span>
       <div className="flex min-w-0 flex-1 flex-col leading-tight">
-        <span className="truncate text-[13.5px] font-medium text-[var(--color-ink)]">
+        <span className="truncate text-[13.5px] font-medium text-white">
           {expense.title}
         </span>
-        <span className="text-[11.5px] text-[var(--color-ink)]/45">
+        <span className="text-[11.5px] text-white/45">
           {expense.category}
         </span>
       </div>
@@ -470,7 +542,7 @@ function ExpenseRow({
           delay: 0.03 * index,
           ease: [0.22, 1, 0.36, 1],
         }}
-        className="text-[13.5px] font-semibold text-[var(--color-ink)]"
+        className="text-[13.5px] font-semibold text-white"
       >
         {expense.amount}
       </motion.span>

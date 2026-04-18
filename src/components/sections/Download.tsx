@@ -6,7 +6,7 @@ export function Download() {
   return (
     <section
       id="download"
-      className="relative isolate overflow-hidden bg-white py-28 sm:py-36"
+      className="relative isolate overflow-hidden bg-[#030303] py-28 sm:py-36"
     >
       {/* Soft background blurs */}
       <div
@@ -28,10 +28,10 @@ export function Download() {
           }}
         />
         <div
-          className="absolute inset-0 opacity-[0.025]"
+          className="absolute inset-0 opacity-[0.06]"
           style={{
             backgroundImage:
-              "linear-gradient(to right, #0a0a0c 1px, transparent 1px), linear-gradient(to bottom, #0a0a0c 1px, transparent 1px)",
+              "linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)",
             backgroundSize: "64px 64px",
             maskImage:
               "radial-gradient(ellipse at 50% 50%, black 40%, transparent 75%)",
@@ -49,29 +49,29 @@ export function Download() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-col items-center gap-6 text-center"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-black/[0.06] bg-white px-3 py-1 text-[12px] font-medium text-[var(--color-ink)]/70">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-[12px] font-medium text-white/70">
             <span
               className="h-1.5 w-1.5 rounded-full"
-              style={{ background: "var(--color-teal-500)" }}
+              style={{ background: "var(--color-teal-400)" }}
             />
             Скачать приложение
           </span>
 
-          <h2 className="max-w-[22ch] text-balance text-[38px] font-semibold leading-[1.04] tracking-[-0.02em] text-[var(--color-ink)] sm:text-[52px] lg:text-[64px]">
+          <h2 className="max-w-[22ch] text-balance text-[38px] font-semibold leading-[1.04] tracking-[-0.02em] text-white sm:text-[52px] lg:text-[64px]">
             Готов{" "}
             <span
               style={{
                 fontFamily: "var(--font-display)",
                 fontStyle: "italic",
               }}
-              className="font-normal text-[var(--color-teal-600)]"
+              className="font-normal text-[var(--color-teal-300)]"
             >
               начать
             </span>
             ?
           </h2>
 
-          <p className="max-w-[58ch] text-[16px] leading-relaxed text-[var(--color-ink)]/55 sm:text-[17.5px]">
+          <p className="max-w-[58ch] text-[16px] leading-relaxed text-white/60 sm:text-[17.5px]">
             Скачай SDViGApp и верни себе фокус. Бесплатно, без рекламы и без
             отслеживания — всё работает на устройстве.
           </p>
@@ -87,7 +87,7 @@ export function Download() {
             />
           </div>
 
-          <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[12.5px] text-[var(--color-ink)]/50">
+          <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[12.5px] text-white/45">
             <TrustItem>iOS 16+</TrustItem>
             <Dot />
             <TrustItem>Android 12+</TrustItem>
@@ -109,7 +109,7 @@ function TrustItem({ children }: { children: React.ReactNode }) {
 function Dot() {
   return (
     <li aria-hidden="true" className="inline-flex items-center">
-      <span className="h-1 w-1 rounded-full bg-[var(--color-ink)]/25" />
+      <span className="h-1 w-1 rounded-full bg-white/30" />
     </li>
   );
 }
@@ -131,7 +131,7 @@ function StoreButton({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={isApple ? "Скачать в App Store" : "Скачать в Google Play"}
-      className="inline-flex h-14 items-center gap-3 rounded-2xl px-5 text-white shadow-[0_14px_30px_-18px_rgba(10,10,12,0.8)] transition-colors"
+      className="inline-flex h-14 items-center gap-3 rounded-2xl border border-white/[0.08] px-5 text-white shadow-[0_14px_30px_-18px_rgba(0,0,0,0.85)] transition-colors"
       style={{
         background: "linear-gradient(180deg, #1b1b1e 0%, #0a0a0c 100%)",
       }}

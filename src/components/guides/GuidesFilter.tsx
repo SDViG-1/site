@@ -96,8 +96,8 @@ function TabRow({
             onClick={() => onChange(f)}
             className={`relative inline-flex h-10 flex-none items-center gap-2 rounded-full px-4 text-[13.5px] font-medium transition-colors ${
               isActive
-                ? "text-white"
-                : "text-[var(--color-ink)]/70 hover:text-[var(--color-ink)]"
+                ? "text-[#0a0a0c]"
+                : "text-white/60 hover:text-white"
             }`}
           >
             {isActive && (
@@ -106,9 +106,9 @@ function TabRow({
                 className="absolute inset-0 rounded-full"
                 style={{
                   background:
-                    "linear-gradient(180deg, #1b1b1e 0%, #0a0a0c 100%)",
+                    "linear-gradient(180deg, #ffffff 0%, #e3e3e5 100%)",
                   boxShadow:
-                    "0 10px 24px -14px rgba(10,10,12,0.45), inset 0 1px 0 rgba(255,255,255,0.06)",
+                    "0 10px 24px -14px rgba(255,255,255,0.2), inset 0 1px 0 rgba(255,255,255,0.6)",
                 }}
                 transition={{
                   type: "spring",
@@ -122,8 +122,8 @@ function TabRow({
             <span
               className={`relative z-10 inline-flex h-5 min-w-[22px] items-center justify-center rounded-full px-1.5 text-[11px] font-semibold tabular-nums transition-colors ${
                 isActive
-                  ? "bg-white/12 text-white/85"
-                  : "bg-black/[0.05] text-[var(--color-ink)]/55"
+                  ? "bg-black/10 text-[#0a0a0c]/70"
+                  : "bg-white/[0.06] text-white/55"
               }`}
               aria-label={`${count} материалов`}
             >
@@ -149,7 +149,7 @@ function SearchInput({
 
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-ink)]/45"
+        className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-white/45"
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
           <circle
@@ -174,7 +174,7 @@ function SearchInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Поиск по материалам"
-        className="block h-11 w-full rounded-full border border-black/[0.08] bg-white py-0 pl-11 pr-11 text-[14px] text-[var(--color-ink)] placeholder:text-[var(--color-ink)]/40 transition-colors focus:border-[var(--color-teal-400)] focus:outline-none focus:ring-4 focus:ring-[var(--color-teal-400)]/15"
+        className="block h-11 w-full rounded-full border border-white/[0.1] bg-white/[0.04] py-0 pl-11 pr-11 text-[14px] text-white placeholder:text-white/35 transition-colors focus:border-[var(--color-teal-400)] focus:outline-none focus:ring-4 focus:ring-[var(--color-teal-400)]/25"
       />
 
       <AnimatePresence>
@@ -188,7 +188,7 @@ function SearchInput({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.85 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute right-2.5 top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full bg-black/[0.05] text-[var(--color-ink)]/60 transition-colors hover:bg-black/[0.1] hover:text-[var(--color-ink)]"
+            className="absolute right-2.5 top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full bg-white/[0.08] text-white/70 transition-colors hover:bg-white/[0.14] hover:text-white"
           >
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
               <path
@@ -250,11 +250,11 @@ function EmptyState({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="flex flex-col items-center gap-3 rounded-[24px] border border-dashed border-black/[0.08] bg-white px-8 py-16 text-center"
+      className="flex flex-col items-center gap-3 rounded-[24px] border border-dashed border-white/[0.1] bg-white/[0.02] px-8 py-16 text-center"
     >
       <span
         aria-hidden="true"
-        className="grid h-12 w-12 place-items-center rounded-full bg-[var(--color-cream)] text-[var(--color-ink)]/40"
+        className="grid h-12 w-12 place-items-center rounded-full bg-white/[0.06] text-white/45"
       >
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
           <circle cx="8" cy="8" r="5.5" stroke="currentColor" strokeWidth="1.5" />
@@ -266,20 +266,20 @@ function EmptyState({
           />
         </svg>
       </span>
-      <h3 className="text-[18px] font-semibold text-[var(--color-ink)]">
+      <h3 className="text-[18px] font-semibold text-white">
         Ничего не нашлось
       </h3>
-      <p className="max-w-[42ch] text-[14px] leading-relaxed text-[var(--color-ink)]/55">
+      <p className="max-w-[42ch] text-[14px] leading-relaxed text-white/55">
         {query.trim().length > 0 ? (
           <>
             По запросу{" "}
-            <span className="font-medium text-[var(--color-ink)]/80">
+            <span className="font-medium text-white/85">
               «{query.trim()}»
             </span>
             {filter !== "Все" && (
               <>
                 {" "}в категории{" "}
-                <span className="font-medium text-[var(--color-ink)]/80">
+                <span className="font-medium text-white/85">
                   {filter}
                 </span>
               </>
@@ -289,7 +289,7 @@ function EmptyState({
         ) : (
           <>
             В категории{" "}
-            <span className="font-medium text-[var(--color-ink)]/80">
+            <span className="font-medium text-white/85">
               {filter}
             </span>{" "}
             пока нет материалов. Скоро появятся.

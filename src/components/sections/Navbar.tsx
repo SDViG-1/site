@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   motion,
   AnimatePresence,
   useScroll,
   useMotionValueEvent,
+  useReducedMotion,
 } from "framer-motion";
 import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
@@ -30,10 +31,39 @@ export function Navbar() {
   const [hovered, setHovered] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [headerHidden, setHeaderHidden] = useState(false);
+  const lastScrollY = useRef(0);
+  const mobileOpenRef = useRef(false);
+  const reduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
+
+  useLayoutEffect(() => {
+    mobileOpenRef.current = mobileOpen;
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    lastScrollY.current = scrollY.get();
+  }, [scrollY]);
 
   useMotionValueEvent(scrollY, "change", (v) => {
     setScrolled(v > 12);
+
+    if (reduceMotion || mobileOpenRef.current) {
+      lastScrollY.current = v;
+      return;
+    }
+
+    const prev = lastScrollY.current;
+    lastScrollY.current = v;
+
+    if (v < 48) {
+      setHeaderHidden(false);
+      return;
+    }
+
+    const delta = v - prev;
+    if (delta > 6) setHeaderHidden(true);
+    else if (delta < -6) setHeaderHidden(false);
   });
 
   useEffect(() => {
@@ -56,12 +86,22 @@ export function Navbar() {
     };
   }, [mobileOpen]);
 
+  const navHidden =
+    headerHidden && !mobileOpen && !reduceMotion;
+
   return (
     <>
       <motion.header
         initial={{ y: -24, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+        animate={{
+          opacity: 1,
+          y: navHidden ? "-160%" : 0,
+        }}
+        transition={{
+          duration: navHidden ? 0.28 : 0.4,
+          ease: [0.22, 1, 0.36, 1] as const,
+        }}
+        style={{ pointerEvents: navHidden ? "none" : "auto" }}
         className="fixed inset-x-0 top-3 z-50 flex justify-center px-4 sm:top-5"
       >
         <nav
@@ -71,8 +111,8 @@ export function Navbar() {
             "md:w-auto md:justify-start",
             "backdrop-blur-xl",
             scrolled
-              ? "border-black/[0.06] bg-white/70 shadow-[0_8px_30px_-12px_rgba(10,10,12,0.18)]"
-              : "border-black/[0.04] bg-white/40 shadow-[0_2px_10px_-8px_rgba(10,10,12,0.15)]"
+              ? "border-white/[0.08] bg-[#0a0a0c]/70 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.55)]"
+              : "border-white/[0.05] bg-[#0a0a0c]/40 shadow-[0_2px_10px_-8px_rgba(0,0,0,0.35)]"
           )}
           style={{
             padding: "6px",
@@ -104,7 +144,7 @@ export function Navbar() {
             <Link
               href="#login"
               className={cn(
-                "hidden h-9 items-center rounded-full px-3 text-[13.5px] font-medium text-[var(--color-ink)]/70 transition-colors hover:text-[var(--color-ink)]/45 md:inline-flex"
+                "hidden h-9 items-center rounded-full px-3 text-[13.5px] font-medium text-white/70 transition-colors hover:text-white md:inline-flex"
               )}
             >
               Войти
@@ -147,7 +187,7 @@ export function Navbar() {
               aria-expanded={mobileOpen}
               aria-controls="mobile-nav"
               onClick={() => setMobileOpen((v) => !v)}
-              className="ml-1 grid h-9 w-9 place-items-center rounded-full border border-black/[0.06] bg-white/60 text-[var(--color-ink)] md:hidden"
+              className="ml-1 grid h-9 w-9 place-items-center rounded-full border border-white/[0.08] bg-white/[0.05] text-white md:hidden"
             >
               <Burger open={mobileOpen} />
             </button>
@@ -174,8 +214,8 @@ function NavLink({
   onHover: (id: string | null) => void;
 }) {
   const className = cn(
-    "relative inline-flex h-9 items-center rounded-full px-4 text-[13.5px] font-medium text-[var(--color-ink)]/75 transition-colors",
-    "hover:text-[var(--color-ink)]"
+    "relative inline-flex h-9 items-center rounded-full px-4 text-[13.5px] font-medium text-white/70 transition-colors",
+    "hover:text-white"
   );
 
   const content = (
@@ -285,7 +325,7 @@ function MobileMenu({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-[var(--color-ink)]/18 backdrop-blur-md"
+            className="absolute inset-0 bg-black/60 backdrop-blur-md"
           />
 
           <motion.div
@@ -293,9 +333,9 @@ function MobileMenu({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "-4%", opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mx-0 mt-[72px] overflow-hidden rounded-b-[28px] border-b border-black/[0.06] bg-white px-4 pb-5 pt-2 shadow-[0_40px_80px_-30px_rgba(10,10,12,0.25)] sm:px-5"
+            className="relative mx-0 mt-[72px] overflow-hidden rounded-b-[28px] border-b border-white/[0.08] bg-[#0a0a0c] px-4 pb-5 pt-2 shadow-[0_40px_80px_-30px_rgba(0,0,0,0.6)] sm:px-5"
           >
-            <ul className="flex flex-col divide-y divide-black/[0.05]">
+            <ul className="flex flex-col divide-y divide-white/[0.06]">
               {items.map((item, i) => (
                 <motion.li
                   key={item.id}
@@ -312,11 +352,11 @@ function MobileMenu({
               ))}
             </ul>
 
-            <div className="mt-5 flex flex-col gap-3 border-t border-black/[0.05] pt-5">
+            <div className="mt-5 flex flex-col gap-3 border-t border-white/[0.06] pt-5">
               <Link
                 href="#login"
                 onClick={onClose}
-                className="inline-flex h-12 w-full items-center justify-center rounded-full border border-black/[0.08] bg-white text-[15px] font-semibold text-[var(--color-ink)]"
+                className="inline-flex h-12 w-full items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.04] text-[15px] font-semibold text-white"
               >
                 Войти
               </Link>
@@ -356,7 +396,7 @@ function MobileNavLink({
   onClose: () => void;
 }) {
   const baseClass =
-    "flex items-center justify-between px-2 py-5 text-[18px] font-semibold text-[var(--color-ink)] active:bg-black/[0.03]";
+    "flex items-center justify-between px-2 py-5 text-[18px] font-semibold text-white active:bg-white/[0.04]";
 
   if (item.isRoute) {
     return (
