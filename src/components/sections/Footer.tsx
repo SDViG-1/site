@@ -31,17 +31,17 @@ const COLUMNS = [
       { label: "Гайды", href: "/guides" },
       { label: "API", href: "#api" },
       { label: "Статус", href: "#status" },
-      { label: "Контакты", href: "mailto:hello@sdvig.app" },
+      { label: "Контакты", href: "/contacts" },
     ],
   },
   {
     title: "Юридическое",
     links: [
       { label: "Условия", href: "#terms" },
-      { label: "Приватность", href: "#privacy-policy" },
+      { label: "Политика конфиденциальности", href: "/privacy" },
+      { label: "Согласие на обработку ПД", href: "/privacy#consent" },
       { label: "Cookie", href: "#cookies" },
       { label: "Лицензии", href: "#licenses" },
-      { label: "DPA", href: "#dpa" },
     ],
   },
 ];

@@ -24,6 +24,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: "ecosystem", label: "Экосистема", href: "/#ecosystem" },
   { id: "guides", label: "Гайды", href: "/guides", isRoute: true },
   { id: "pricing", label: "Тарифы", href: "/#pricing" },
+  { id: "contacts", label: "Контакты", href: "/contacts", isRoute: true },
   { id: "download", label: "Скачать", href: "/#download" },
 ];
 
