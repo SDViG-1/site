@@ -3,45 +3,46 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 
+/** Якоря главной — с `/#`, чтобы работали с GitHub Pages (basePath) и со внутренних страниц. */
 const COLUMNS = [
   {
     title: "Продукт",
     links: [
-      { label: "Метод", href: "#method" },
-      { label: "Экосистема", href: "#ecosystem" },
-      { label: "Геймификация", href: "#dopamine" },
-      { label: "Тарифы", href: "#pricing" },
-      { label: "Что нового", href: "#changelog" },
+      { label: "Метод", href: "/#method" },
+      { label: "Экосистема", href: "/#ecosystem" },
+      { label: "Геймификация", href: "/#dopamine" },
+      { label: "Тарифы", href: "/#pricing" },
+      { label: "Что нового", href: "/#changelog" },
     ],
   },
   {
     title: "Компания",
     links: [
-      { label: "О нас", href: "#about" },
-      { label: "Принципы", href: "#principles" },
-      { label: "Блог", href: "#blog" },
-      { label: "Пресса", href: "#press" },
-      { label: "Карьера", href: "#careers" },
+      { label: "О нас", href: "/#about" },
+      { label: "Принципы", href: "/#principles" },
+      { label: "Блог", href: "/#blog" },
+      { label: "Пресса", href: "/#press" },
+      { label: "Карьера", href: "/#careers" },
     ],
   },
   {
     title: "Ресурсы",
     links: [
-      { label: "Помощь", href: "#help" },
+      { label: "Помощь", href: "/#help" },
       { label: "Гайды", href: "/guides" },
-      { label: "API", href: "#api" },
-      { label: "Статус", href: "#status" },
+      { label: "API", href: "/#api" },
+      { label: "Статус", href: "/#status" },
       { label: "Контакты", href: "/contacts" },
     ],
   },
   {
     title: "Юридическое",
     links: [
-      { label: "Условия", href: "#terms" },
+      { label: "Условия", href: "/#terms" },
       { label: "Политика конфиденциальности", href: "/privacy" },
       { label: "Согласие на обработку ПД", href: "/privacy#consent" },
-      { label: "Cookie", href: "#cookies" },
-      { label: "Лицензии", href: "#licenses" },
+      { label: "Cookie", href: "/#cookies" },
+      { label: "Лицензии", href: "/#licenses" },
     ],
   },
 ];
@@ -92,12 +93,12 @@ export function Footer() {
               >
                 Скачать SDViGApp
               </Link>
-              <a
-                href="#pricing"
+              <Link
+                href="/#pricing"
                 className="inline-flex h-12 items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.04] px-5 text-[14.5px] font-semibold text-white transition-colors hover:border-white/[0.25] hover:bg-white/[0.08]"
               >
                 Сравнить тарифы
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -134,12 +135,7 @@ export function Footer() {
               <ul className="flex flex-col gap-2">
                 {col.links.map((l) => (
                   <li key={l.label}>
-                    <a
-                      href={l.href}
-                      className="text-[13.5px] text-white/65 transition-colors hover:text-white"
-                    >
-                      {l.label}
-                    </a>
+                    <FooterNavLink href={l.href}>{l.label}</FooterNavLink>
                   </li>
                 ))}
               </ul>
@@ -178,6 +174,34 @@ export function Footer() {
         </p>
       </div>
     </footer>
+  );
+}
+
+/** next/link учитывает basePath (GitHub Pages); обычный <a href="/…"> — нет. */
+function FooterNavLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  const className =
+    "text-[13.5px] text-white/65 transition-colors hover:text-white";
+  if (href.startsWith("http") || href.startsWith("mailto:")) {
+    return (
+      <a
+        href={href}
+        className={className}
+        rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+      >
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link href={href} className={className}>
+      {children}
+    </Link>
   );
 }
 

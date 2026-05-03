@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Lora, JetBrains_Mono } from "next/font/google";
+import { Inter, Chakra_Petch, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -9,11 +9,11 @@ const inter = Inter({
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-const display = Lora({
+const display = Chakra_Petch({
   variable: "--font-display",
-  subsets: ["latin", "cyrillic"],
+  subsets: ["latin", "latin-ext"],
   display: "swap",
-  weight: ["400", "500"],
+  weight: ["300", "400", "500", "600", "700"],
   style: ["normal", "italic"],
 });
 

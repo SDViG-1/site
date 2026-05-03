@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
+import { PrivacyInteractive } from "./PrivacyInteractive";
 
 export const metadata: Metadata = {
   title: "Политика конфиденциальности",
@@ -34,6 +35,7 @@ export default function PrivacyPage() {
   return (
     <div className="bg-white text-[#0a0a0c]">
       <Navbar />
+      <PrivacyInteractive />
 
       <main className="relative">
         {/* Soft backdrop */}
@@ -47,8 +49,8 @@ export default function PrivacyPage() {
         />
 
         {/* Hero */}
-        <section className="relative pb-14 pt-32 sm:pt-40">
-          <div className="mx-auto w-full max-w-[1200px] px-6">
+        <section className="relative pb-10 pt-32 sm:pb-14 sm:pt-40">
+          <div className="mx-auto w-full min-w-0 max-w-[1200px] px-4 sm:px-6">
             <Link
               href="/"
               className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#52525b] transition-colors hover:text-[#0a0a0c]"
@@ -74,18 +76,18 @@ export default function PrivacyPage() {
                 Юридические документы
               </span>
 
-              <h1 className="max-w-[22ch] text-[38px] font-semibold leading-[1.04] tracking-[-0.02em] sm:text-[56px] lg:text-[64px]">
+              <h1 className="w-full min-w-0 max-w-full text-balance break-words text-[clamp(1.625rem,0.75rem+4.2vw,4rem)] font-semibold leading-[1.08] tracking-[-0.02em] [overflow-wrap:anywhere] sm:text-[clamp(2rem,1rem+4vw,3.75rem)] lg:text-[clamp(2.5rem,1.5rem+3vw,4rem)]">
                 Политика{" "}
                 <span
                   style={{ fontFamily: "var(--font-display)", fontStyle: "italic" }}
-                  className="font-normal text-[#138f7d]"
+                  className="inline font-normal text-[#138f7d]"
                 >
                   конфиденциальности
                 </span>
                 .
               </h1>
 
-              <p className="max-w-[62ch] text-[16px] leading-relaxed text-[#52525b] sm:text-[17px]">
+              <p className="max-w-[62ch] text-[0.9375rem] leading-relaxed text-[#52525b] sm:text-[17px]">
                 Документ описывает, какие персональные данные {OPERATOR} (далее — Оператор)
                 обрабатывает на сайте{" "}
                 <a
@@ -115,8 +117,8 @@ export default function PrivacyPage() {
 
         {/* Summary card */}
         <section className="relative">
-          <div className="mx-auto w-full max-w-[1200px] px-6">
-            <div className="overflow-hidden rounded-[24px] border border-[#e4e4e7] bg-[#fafaf7] p-6 sm:p-8">
+          <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6">
+            <div className="overflow-hidden rounded-[24px] border border-[#e4e4e7] bg-[#fafaf7] p-5 sm:p-8">
               <div className="grid gap-6 sm:grid-cols-3">
                 <SummaryItem
                   title="Что собираем"
@@ -136,21 +138,24 @@ export default function PrivacyPage() {
         </section>
 
         {/* Body */}
-        <section className="relative py-16 sm:py-24">
-          <div className="mx-auto grid w-full max-w-[1200px] grid-cols-1 gap-12 px-6 lg:grid-cols-[260px_1fr] lg:gap-14">
+        <section className="relative py-10 sm:py-16 lg:py-20">
+          <div className="mx-auto grid w-full max-w-[1200px] grid-cols-1 gap-8 px-4 sm:gap-10 sm:px-6 lg:grid-cols-[minmax(0,220px)_1fr] lg:gap-10 xl:grid-cols-[240px_1fr]">
             {/* Sticky TOC */}
-            <aside className="lg:sticky lg:top-28 lg:self-start">
-              <div className="rounded-[20px] border border-[#e4e4e7] bg-white p-5">
-                <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#71717a]">
+            <aside
+              id="privacy-toc"
+              className="scroll-mt-28 lg:sticky lg:top-28 lg:self-start"
+            >
+              <div className="rounded-2xl border border-[#e4e4e7] bg-white p-3 sm:p-4">
+                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#71717a] sm:text-[11px] sm:tracking-[0.22em]">
                   Содержание
                 </div>
-                <nav className="mt-4">
-                  <ol className="flex flex-col gap-1">
+                <nav className="mt-2 sm:mt-3" aria-label="Содержание документа">
+                  <ol className="flex flex-col gap-0 sm:gap-0.5">
                     {TOC.map((t) => (
                       <li key={t.id}>
                         <a
                           href={`#${t.id}`}
-                          className="block rounded-lg px-2 py-1.5 text-[13.5px] text-[#52525b] transition-colors hover:bg-[#f4f4f5] hover:text-[#0a0a0c]"
+                          className="block rounded-md px-1.5 py-1 text-[12px] leading-snug text-[#52525b] transition-colors hover:bg-[#f4f4f5] hover:text-[#0a0a0c] sm:px-2 sm:py-1.5 sm:text-[13px] sm:leading-normal"
                         >
                           {t.label}
                         </a>
@@ -162,7 +167,7 @@ export default function PrivacyPage() {
             </aside>
 
             {/* Article */}
-            <article className="max-w-[72ch]">
+            <article className="min-w-0 max-w-[72ch]">
               <Section id="general" n="1" title="Общие положения">
                 <p>
                   Настоящая политика обработки персональных данных составлена в
@@ -797,7 +802,7 @@ export default function PrivacyPage() {
               </Section>
 
               {/* Foot */}
-              <div className="mt-16 flex flex-wrap items-center justify-between gap-4 rounded-[20px] border border-[#e4e4e7] bg-[#fafaf7] p-6">
+              <div className="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-[20px] border border-[#e4e4e7] bg-[#fafaf7] p-5 sm:mt-14 sm:p-6">
                 <div>
                   <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#71717a]">
                     Остались вопросы
@@ -902,11 +907,11 @@ function Section({
     <section
       id={id}
       className={
-        "scroll-mt-28 border-t pt-10 first:border-t-0 first:pt-0 sm:pt-12 " +
+        "scroll-mt-28 border-t pt-7 first:border-t-0 first:pt-0 sm:pt-9 " +
         (accent ? "border-[#d1f2eb]" : "border-[#e4e4e7]")
       }
     >
-      <div className="mb-5 flex items-center gap-3">
+      <div className="mb-4 flex flex-wrap items-center gap-2 sm:mb-5 sm:gap-3">
         <span
           className={
             "grid h-7 min-w-7 place-items-center rounded-full px-2 text-[12px] font-semibold " +
@@ -917,7 +922,7 @@ function Section({
         >
           {n}
         </span>
-        <h2 className="text-[22px] font-semibold leading-tight tracking-[-0.01em] text-[#0a0a0c] sm:text-[26px]">
+        <h2 className="min-w-0 flex-1 text-[clamp(1.125rem,0.5rem+1.8vw,1.625rem)] font-semibold leading-tight tracking-[-0.01em] text-[#0a0a0c]">
           {title}
         </h2>
       </div>
@@ -972,7 +977,7 @@ function GridRow({
   return (
     <div
       className={
-        "grid grid-cols-1 gap-1 p-5 sm:grid-cols-[200px_1fr] sm:gap-6 sm:p-6 " +
+        "grid grid-cols-1 gap-1 p-4 sm:grid-cols-[200px_1fr] sm:gap-5 sm:p-5 " +
         (last ? "" : "border-b border-[#e4e4e7]")
       }
     >

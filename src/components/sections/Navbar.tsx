@@ -12,6 +12,8 @@ import {
 import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
 
+const MotionLink = motion(Link);
+
 type NavItem = {
   id: string;
   label: string;
@@ -150,11 +152,11 @@ export function Navbar() {
             >
               Войти
             </Link>
-            <motion.a
+            <MotionLink
+              href="/#download"
               whileHover={{ y: -1 }}
               whileTap={{ scale: 0.97 }}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
-              href="/#download"
               className={cn(
                 "relative inline-flex h-9 items-center gap-1.5 overflow-hidden rounded-full px-4 text-[13.5px] font-semibold text-white",
                 "shadow-[0_6px_18px_-6px_rgba(27,170,150,0.55)]"
@@ -180,7 +182,7 @@ export function Navbar() {
                 />
               </svg>
               <span className="hidden sm:inline">Скачать</span>
-            </motion.a>
+            </MotionLink>
 
             <button
               type="button"
@@ -255,7 +257,7 @@ function NavLink({
   }
 
   return (
-    <a
+    <Link
       role="menuitem"
       href={item.href}
       onMouseEnter={() => onHover(item.id)}
@@ -263,7 +265,7 @@ function NavLink({
       className={className}
     >
       {content}
-    </a>
+    </Link>
   );
 }
 
@@ -409,10 +411,10 @@ function MobileNavLink({
   }
 
   return (
-    <a href={item.href} onClick={onClose} className={baseClass}>
+    <Link href={item.href} onClick={onClose} className={baseClass}>
       <span>{item.label}</span>
       <Chevron />
-    </a>
+    </Link>
   );
 }
 

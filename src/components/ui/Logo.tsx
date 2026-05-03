@@ -24,7 +24,10 @@ export function Logo({ className, compact = false }: LogoProps) {
       >
         <LogoMark />
       </span>
-      <span className="flex items-baseline gap-[2px]">
+      <span
+        className="flex items-baseline gap-[2px]"
+        style={{ fontFamily: "var(--font-display)" }}
+      >
         <span
           className={cn(
             "font-semibold tracking-tight",

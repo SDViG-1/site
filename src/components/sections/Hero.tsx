@@ -89,7 +89,7 @@ export function Hero() {
             <span className="block bg-gradient-to-b from-white to-white/75 bg-clip-text text-transparent">
               Вытащи себя
             </span>
-            <span className="mt-1 block text-white/90">
+            <span className="mt-1 block w-full text-white/90 lg:text-left">
               из&nbsp;
               <MorphWord words={MORPH_WORDS} />
             </span>
@@ -170,12 +170,12 @@ function MorphWordStatic({ words }: { words: readonly string[] }) {
   }, [words.length]);
   const word = words[i] ?? "";
   return (
-    <span className="relative inline-block align-baseline">
+    <span className="relative inline-block align-baseline lg:text-left">
       <span aria-hidden="true" className="invisible whitespace-nowrap">
         прокрастинации
       </span>
       <span
-        className={`absolute inset-0 whitespace-nowrap italic ${morphWordClass}`}
+        className={`absolute inset-0 whitespace-nowrap italic lg:text-left ${morphWordClass}`}
         style={{
           fontFamily: "var(--font-display)",
           fontWeight: 400,
@@ -225,12 +225,12 @@ function MorphWordTypewriter({ words }: { words: readonly string[] }) {
   }, [display, phase, target, wordIndex, words.length]);
 
   return (
-    <span className="relative inline-block align-baseline">
+    <span className="relative inline-block align-baseline lg:text-left">
       <span aria-hidden="true" className="invisible whitespace-nowrap">
         прокрастинации
       </span>
       <span
-        className={`absolute inset-0 whitespace-nowrap italic ${morphWordClass}`}
+        className={`absolute inset-0 whitespace-nowrap italic lg:text-left ${morphWordClass}`}
         style={{
           fontFamily: "var(--font-display)",
           fontWeight: 400,
